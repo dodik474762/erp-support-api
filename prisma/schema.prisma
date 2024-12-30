@@ -1,0 +1,3627 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int    @id @default(autoincrement()) 
+  roles      Int?
+  nik        String?   @db.VarChar(255)
+  password   String?   @db.Text
+  deleted    DateTime? @db.Timestamp(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  username   String?   @db.VarChar(200)
+
+  @@index([nik], map: "users_nik_IDX")
+  @@index([username], map: "users_username_IDX")
+  @@map("users")
+}
+
+model actor {
+  id         Int    @id @default(autoincrement()) 
+  users      Int?
+  latitude   Float?
+  longitude  Float?
+  content    String?   @db.LongText
+  action     String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+
+  @@index([users], map: "actor_users_IDX")
+}
+
+model app_version_mobile {
+  id           Int    @id @default(autoincrement())
+  version_app  String?   @db.VarChar(100)
+  release_note String?   @db.Text
+  url_download String?   @db.VarChar(300)
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+  file         String?   @db.VarChar(200)
+}
+
+model artransaction {
+  id                      Int    @id @default(autoincrement()) 
+  dataar                  Int?
+  total_bayar             Float?
+  created_at              DateTime? @db.Timestamp(0)
+  updated_at              DateTime? @db.Timestamp(0)
+  document                Int?
+  extra_call              String?   @db.VarChar(100)
+  rute_id                 String?   @db.VarChar(100)
+  tgl_extra_call          DateTime? @db.Date
+  nik_salesman_extra_call String?   @db.VarChar(200)
+
+  @@index([dataar], map: "artransaction_dataar_IDX")
+  @@index([document], map: "artransaction_document_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model card_stock {
+  id              Int    @id @default(autoincrement()) 
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(255)
+  gudang          Int?
+  idheader        Int?
+  iddetail        Int?
+  nama_produk     String?   @db.VarChar(255)
+  produk          Int?
+  masuk           Float?
+  keluar          Float?
+  jenis_transaksi String?   @db.VarChar(255)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  distributor     Int?
+  periode_tanggal Int?
+  periode_bulan   Int?
+  periode_tahun   Int?
+  kodebarangdepo  String?   @db.VarChar(200)
+  krt             Float?
+  pack            Float?
+  sct             Float?
+  kode_motasa     String?   @db.VarChar(200)
+  namabarangdepo  String?   @db.VarChar(255)
+  periode         DateTime? @db.Date
+
+  @@index([iddepo], map: "card_stock_iddepo_IDX")
+  @@index([kodebarangdepo], map: "card_stock_kodebarangdepo_IDX")
+  @@index([nama_depo], map: "card_stock_nama_depo_IDX")
+}
+
+model closed_order {
+  id            Int    @id @default(autoincrement()) 
+  no_closed     String?   @db.VarChar(255)
+  document      Int?
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  content       String?   @db.LongText
+  tgl_transaksi DateTime? @db.Date
+}
+
+model dataar {
+  id                      Int    @id @default(autoincrement()) 
+  kode_customer           String?   @db.VarChar(255)
+  nama_customer           String?   @db.VarChar(255)
+  id_pasar                Int?
+  nama_pasar              String?   @db.VarChar(255)
+  nama_wilayah            String?   @db.VarChar(255)
+  total_piutang           Float?
+  created_at              DateTime? @db.Timestamp(0)
+  updated_at              DateTime? @db.Timestamp(0)
+  periode                 DateTime? @db.Date
+  id_qr_outlet            String?   @db.VarChar(50)
+  invoice                 String?   @db.VarChar(100)
+  invoice_date            DateTime? @db.Date
+  invoice_due_date        DateTime? @db.Date
+  top                     String?   @db.VarChar(200)
+  id_distributor          Int?
+  nama_distributor        String?   @db.VarChar(255)
+  distributor             Int?
+  iddepo                  Int?
+  nama_depo               String?   @db.VarChar(300)
+  invoic_date             String?   @db.VarChar(50)
+  nama_toko               String?   @db.VarChar(255)
+  id_wilayah              Int?
+  tipe_outlet             String?   @db.VarChar(30)
+  extra_call              String?   @db.VarChar(100)
+  tgl_extra_call          DateTime? @db.Date
+  rute_id                 String?   @db.VarChar(100)
+  nik_salesman_extra_call String?   @db.VarChar(200)
+  nama_pemilik            String?   @db.VarChar(255)
+  alamat_toko             String?   @db.VarChar(255)
+  no_ktp                  String?   @db.VarChar(200)
+  no_telepon              String?   @db.VarChar(100)
+  foto                    String?   @db.VarChar(255)
+  survey_pasar_id         Int?
+  mrdo_id                 Int?
+  rute_detail_id          Int?
+  selling_type            String?   @db.VarChar(5)
+
+  @@index([distributor], map: "dataar_distributor_IDX")
+  @@index([id_qr_outlet, kode_customer], map: "dataar_id_qr_outlet_IDX")
+  @@index([iddepo], map: "dataar_iddepo_IDX")
+}
+
+model dataar_import {
+  id               Int    @id @default(autoincrement()) 
+  periode          DateTime? @db.Date
+  kode_customer    String?   @db.VarChar(255)
+  nama_customer    String?   @db.VarChar(255)
+  id_pasar         Int?
+  nama_pasar       String?   @db.VarChar(255)
+  nama_wilayah     String?   @db.VarChar(255)
+  invoice          String?   @db.VarChar(255)
+  top              String?   @db.VarChar(255)
+  invoice_date     DateTime? @db.Date
+  invoice_due_date DateTime? @db.Date
+  total_piutang    Float?
+  id_qr_outlet     Int?
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(255)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  distributor      Int?
+  iddepo           Int?
+  nama_depo        String?   @db.VarChar(300)
+}
+
+model delivery_order {
+  id          Int    @id @default(autoincrement()) 
+  no_order    String?   @db.VarChar(255)
+  no_do       String?   @db.VarChar(255)
+  tanggal_do  DateTime? @db.Date
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  status      String?   @db.VarChar(100)
+  distributor Int?
+}
+
+model depo_has_stock {
+  id                 Int    @id @default(autoincrement()) 
+  iddepo             Int?
+  nama_depo          String?   @db.VarChar(255)
+  stok_masuk_crt     Float?
+  stok_masuk         Float?
+  stok_keluar        Float?
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  periode            DateTime? @db.Date
+  kode_barang_motasa String?   @db.VarChar(200)
+  kode_barang_depo   String?   @db.VarChar(200)
+  distributor        Int?
+}
+
+model detail_pengajuan_qr_membership {
+  id              Int       @id @default(autoincrement())
+  id_pengajuan    Int?
+  survey_pasar_id Int?
+  kode_customer   String?   @db.VarChar(100)
+  id_pasar        Int?
+  nama_pasar      String?   @db.VarChar(100)
+  nama_toko       String?   @db.VarChar(100)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model detail_qr_bermasalah {
+  id              Int       @id @default(autoincrement())
+  id_follow_up_qr Int
+  id_survey_pasar Int
+  kode_customer   String?   @db.VarChar(100)
+  id_pasar        Int
+  permasalahan    String?   @db.VarChar(100)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+  is_printed      Int?      @default(0)
+  iddepo          Int?
+}
+
+model detail_rekap_call {
+  id             Int    @id @default(autoincrement()) 
+  rekap_call     Int?
+  order_id       Int?
+  visit_kandidat Int?
+  deleted        DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model detail_rekap_call_rute {
+  id                    Int    @id @default(autoincrement()) 
+  rekap_call            Int?
+  rute_id               Int?
+  rute_detail_id        Int?
+  rute_detail_outlet_id Int?
+  survey_pasar_id       Int?
+  kode_customer         String?   @db.VarChar(255)
+  nama_outlet           String?   @db.VarChar(255)
+  rute                  String?   @db.VarChar(255)
+  pasar_id              Int?
+  nama_pasar            String?   @db.VarChar(255)
+  deleted               DateTime? @db.Timestamp(0)
+  created_at            DateTime? @db.Timestamp(0)
+  updated_at            DateTime? @db.Timestamp(0)
+  tgl_rute              DateTime? @db.Date
+  tipe_outlet           String?   @db.VarChar(100)
+  location_type         String?   @db.VarChar(100)
+}
+
+model detail_rekening_salesman {
+  id                   Int       @default(autoincrement())
+  id_rekening_salesman Int
+  file_name            String?   @db.VarChar(250)
+  path                 String?   @db.VarChar(250)
+  created_at           DateTime? @db.Timestamp(0)
+  updated_at           DateTime? @db.Timestamp(0)
+  deleted_at           DateTime? @db.Timestamp(0)
+
+  @@id([id, id_rekening_salesman])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detail_summary_order {
+  id             Int       @id @default(autoincrement())
+  id_sesi_import String?   @default("") @db.VarChar(50)
+  distributor    String?   @default("") @db.VarChar(50)
+  id_distributor Int?      @default(0)
+  depo           String?   @default("") @db.VarChar(50)
+  id_depo        Int?      @default(0)
+  id_sales       String?   @default("0") @db.VarChar(100)
+  id_barang      String?   @default("0") @db.VarChar(100)
+  tanggal        DateTime? @db.Date
+  closing        String?   @default("") @db.VarChar(50)
+  nota           String?   @default("") @db.VarChar(500)
+  kode_customer  String?   @default("") @db.VarChar(50)
+  nama_customer  String?   @default("") @db.VarChar(500)
+  frekuensi      String?   @default("") @db.VarChar(50)
+  alamat         String?   @default("") @db.VarChar(500)
+  pasar          String?   @default("") @db.VarChar(500)
+  kecamatan      String?   @default("") @db.VarChar(500)
+  kabupaten      String?   @default("") @db.VarChar(500)
+  kode_barang    String?   @default("") @db.VarChar(500)
+  nama_barang    String?   @default("") @db.VarChar(500)
+  satuan_produk  String?   @default("") @db.VarChar(500)
+  penjualan      Float?    @default(0.000)
+  nama_salesman  String?   @default("") @db.VarChar(500)
+  rupiah         Float?    @default(0.000)
+  dos            Float?    @default(0)
+  pak            Float?    @default(0)
+  pcs            Float?    @default(0)
+  created_at     DateTime? @db.DateTime(0)
+  update_at      DateTime? @db.DateTime(0)
+  tahun_closing  String?   @default("") @db.VarChar(50)
+  penjualand     Float     @default(0.000)
+  kode_barangd   String?   @default("") @db.VarChar(500)
+  nama_barangd   String?   @default("") @db.VarChar(500)
+  satuan_produkd String?   @default("") @db.VarChar(500)
+  no_do          String?   @db.VarChar(150)
+  no_order       String?   @db.VarChar(150)
+  status_do      String?   @db.VarChar(100)
+  id_qr_outlet   Int?
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model dictionary {
+  id         Int    @id @default(autoincrement()) 
+  term_id    String?   @db.VarChar(255)
+  keterangan String?   @db.VarChar(255)
+  context    String?   @db.VarChar(255)
+  deleted    DateTime? @db.Timestamp(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model direksi_contact {
+  id         Int    @id @default(autoincrement())
+  nama       String?   @db.VarChar(100)
+  contact    String?   @db.Text
+  nik        String?   @db.VarChar(300)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model diskon_dua {
+  id                Int    @id @default(autoincrement()) 
+  iddepo            Int?
+  nama_depo         String?   @db.VarChar(255)
+  tglberlaku        DateTime? @db.Date
+  remarks           String?   @db.VarChar(255)
+  deleted           DateTime? @db.Timestamp(0)
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+  diskon_cash       Float?
+  diskon_credit     Float?
+  metode_pembayaran Int?      @db.TinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model diskon_dua_item {
+  id                     Int    @id @default(autoincrement()) 
+  diskon_dua             Int?
+  jenis                  String?   @db.VarChar(255)
+  dari                   Float?
+  sampai                 Float?
+  diskon_persentase_satu Float?
+  diskon_persentase_dua  Float?
+  created_at             DateTime? @db.DateTime(0)
+  updated_at             DateTime? @db.DateTime(0)
+}
+
+model diskon_dua_produk {
+  id               Int    @id @default(autoincrement()) 
+  diskon_dua       Int?
+  kodebarangdepo   String?   @db.VarChar(255)
+  kodebarangmotasa String?   @db.VarChar(100)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+model diskon_khusus {
+  id                Int       @id @default(autoincrement())
+  iddepo            Int?
+  kodebarangdepo    String?   @db.VarChar(100)
+  group             Int?      @db.TinyInt
+  qty               Float?
+  subtotal          Float?
+  metode_pembayaran String?   @db.VarChar(100)
+  diskon_persentase Float?
+  qty_sampai        Float?
+  subtotal_sampai   Int?
+  tgl_berlaku       DateTime? @db.DateTime(0)
+  discount_cash     Int?
+  discount_credit   Int?
+  remark            String?   @db.VarChar(255)
+  deleted           DateTime? @db.DateTime(0)
+  created_at        DateTime? @db.DateTime(0)
+  updated_at        DateTime? @db.DateTime(0)
+}
+
+model diskon_produk {
+  id                 Int    @id @default(autoincrement()) 
+  produk             Int?
+  iddepo             Int?
+  nama_depo          String?   @db.VarChar(255)
+  remarks            String?   @db.VarChar(255)
+  qty_total          Float?
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  tglberlaku         DateTime? @db.Date
+  potongan           Float?
+  deleted            DateTime? @db.Timestamp(0)
+  potongan_persetase Float?
+  produk_satuan      Int?
+}
+
+model diskon_produk_item {
+  id                Int    @id @default(autoincrement()) 
+  diskon_produk     Int?
+  dari              Float?
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+  sampai            Float?
+  diskon_persentase Float?
+}
+
+model diskon_total {
+  id                  Int    @id @default(autoincrement()) 
+  iddepo              Int?
+  remarks             String?   @db.VarChar(255)
+  total               Float?
+  created_at          DateTime? @db.Timestamp(0)
+  updated_at          DateTime? @db.Timestamp(0)
+  deleted             DateTime? @db.Timestamp(0)
+  nama_depo           String?   @db.VarChar(200)
+  tglberlaku          DateTime? @db.Date
+  potongan            Float?
+  potongan_persentase Float?
+}
+
+model distributor {
+  id                 Int    @id @default(autoincrement()) 
+  nama_distributor   String?   @db.VarChar(255)
+  email              String?   @db.VarChar(255)
+  no_hp              String?   @db.VarChar(255)
+  deleted            DateTime? @db.Timestamp(0)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  id_distributor_mss Int?
+}
+
+model distributor_has_call {
+  id          Int    @id @default(autoincrement()) 
+  distributor Int?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model document {
+  id          Int    @id @default(autoincrement()) 
+  no_document String?   @db.VarChar(255)
+  tipe        String?   @db.VarChar(255)
+  deleted     DateTime? @db.Timestamp(0)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model document_transaction {
+  id                 Int    @id @default(autoincrement()) 
+  document           Int?
+  actor              Int?
+  state              String?   @db.VarChar(255)
+  remarks            String?   @db.VarChar(255)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  routing_permission Int?
+
+  @@index([actor], map: "document_transaction_actor_IDX")
+  @@index([document], map: "document_transaction_document_IDX")
+}
+
+model extra_call_salesman {
+  id           Int    @id @default(autoincrement())
+  id_depo      Int?
+  nama_depo    String?   @db.VarChar(100)
+  nik_salesman String?   @db.VarChar(50)
+  hari         String?   @db.VarChar(100)
+  created_at   DateTime? @db.DateTime(0)
+  updated_at   DateTime? @db.DateTime(0)
+  deleted_at   DateTime? @db.DateTime(0)
+}
+
+model follow_up_qr_bermasalah {
+  id               Int       @id @default(autoincrement())
+  document_number  String    @db.VarChar(100)
+  nik              String?   @db.VarChar(100)
+  date_request     DateTime? @db.DateTime(0)
+  tgl_kirim        DateTime? @db.DateTime(0)
+  tgl_diterima     DateTime? @db.DateTime(0)
+  remark_diterima  String?   @db.VarChar(100)
+  remark_kirim     String?   @db.VarChar(100)
+  no_resi          String?   @db.VarChar(100)
+  kurir_expedisi   String    @db.VarChar(10)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+  iddepo           Int?
+  nama_wilayah     String?   @db.VarChar(100)
+  status           String?   @db.VarChar(100)
+  keterangan_kirim String?   @db.VarChar(300)
+}
+
+model fraud_allowance {
+  id              Int       @id @default(autoincrement())
+  id_depo         Int?
+  tipe_outlet     String?   @db.VarChar(20)
+  allowance_qty_1 Float?
+  allowance_qty_2 Float?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+  created_by      String?   @db.VarChar(100)
+  updated_by      String?   @db.VarChar(100)
+}
+
+model fraud_order {
+  id              Int       @id @default(autoincrement())
+  id_distributor  Int?
+  id_depo         Int?
+  order_id        Int?
+  order_produk_id Int?
+  id_survey_pasar Int?
+  kode_customer   String?   @db.VarChar(100)
+  nama_customer   String?   @db.VarChar(100)
+  kode_produk     String?   @db.VarChar(100)
+  nama_produk     String?   @db.VarChar(100)
+  total_qty       Float?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+}
+
+model fraud_potential_order {
+  id              Int       @id @default(autoincrement())
+  id_distributor  Int?
+  id_depo         Int?
+  id_survey_pasar Int?
+  kode_customer   String?   @db.VarChar(100)
+  nama_customer   String?   @db.VarChar(100)
+  kode_produk     String?   @db.VarChar(100)
+  nama_produk     String?   @db.VarChar(100)
+  total_qty       Float?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model general_log {
+  event_time   DateTime @default(now()) @db.Timestamp(0)
+  user_host    String   @db.MediumText
+  thread_id    Int   
+  server_id    Int      @db.UnsignedInt
+  command_type String   @db.VarChar(64)
+  argument     String   @db.MediumText
+
+  @@ignore
+}
+
+model history_aduan {
+  id           Int    @id @default(autoincrement()) 
+  kategori     String?   @db.VarChar(255)
+  kode_outlet  String?   @db.VarChar(50)
+  nama_outlet  String?   @db.VarChar(100)
+  id_pasar     Int?
+  nama_pasar   String?   @db.VarChar(100)
+  id_depo      Int?
+  nama_depo    String?   @db.VarChar(100)
+  ass          String?   @db.VarChar(255)
+  foto         String?   @db.VarChar(255)
+  keterangan   String?   @db.VarChar(255)
+  status       String?   @db.VarChar(20)
+  approved_at  DateTime? @db.Date
+  id_qr_outlet String?   @db.VarChar(100)
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+  deleted_at   DateTime? @db.DateTime(0)
+  document     Int?
+  no_transaksi String?   @db.VarChar(20)
+}
+
+model history_bypass_salesman {
+  id            Int       @id @default(autoincrement())
+  document      Int?
+  no_transaksi  String?   @db.VarChar(20)
+  id_salesman   String?   @db.VarChar(50)
+  nama_salesman String?   @db.VarChar(100)
+  iddepo        Int?
+  nama_depo     String?   @db.VarChar(100)
+  jenis_izin    String?   @db.VarChar(30)
+  remarks       String?   @db.VarChar(255)
+  tgl_izin      DateTime? @db.Date
+  rute_id       Int?
+  input_by      String?   @db.VarChar(100)
+  created_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+  deleted_at    DateTime? @db.DateTime(0)
+}
+
+model history_export_api {
+  id         Int    @id @default(autoincrement()) 
+  order      Int?
+  created_by String?   @db.VarChar(50)
+  remarks    String?   @db.VarChar(150)
+  deleted_at DateTime? @db.Timestamp(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  exec_time  Int?
+}
+
+model history_print_qr_ass_membership {
+  id              Int       @id @default(autoincrement())
+  nik_ass         String?   @db.VarChar(100)
+  nama_ass        String?   @db.VarChar(100)
+  printed_by_user Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model history_print_qr_depo_membership {
+  id              Int       @id @default(autoincrement())
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(100)
+  printed_by_user Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model history_print_qr_membership {
+  id              Int       @id @default(autoincrement())
+  survey_pasar_id Int?
+  printed_by_user Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model history_print_qr_pasar_membership {
+  id              Int       @id @default(autoincrement())
+  id_pasar        Int?
+  nama_pasar      String?   @db.VarChar(100)
+  printed_by_user Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model history_upload_faktur {
+  id             Int       @id @default(autoincrement())
+  id_distributor Int?
+  nama_file      String?   @db.VarChar(100)
+  tgl_upload     DateTime? @db.Date
+  uploader       String?   @db.VarChar(100)
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+}
+
+model izin_kerja {
+  id             Int    @id @default(autoincrement()) 
+  document       Int?
+  iddepo         Int?
+  nama_depo      String?   @db.VarChar(255)
+  distributor    Int?
+  karyawan       Int?
+  jenis_izin     String?   @db.VarChar(255)
+  status         String?   @db.VarChar(255)
+  jumlah_hari    Int?
+  tgl_awal       DateTime? @db.Date
+  tgl_akhir      DateTime? @db.Date
+  bulan_closing  Int?
+  tahun_closing  Int?
+  approved_by    String?   @db.VarChar(255)
+  detail_process String?   @db.Text
+  deleted        DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  no_izin        String?   @db.VarChar(100)
+  remarks        String?   @db.VarChar(200)
+}
+
+model izin_kerja_file {
+  id         Int    @id @default(autoincrement()) 
+  izin_kerja Int?
+  filename   String?   @db.VarChar(255)
+  file_path  String?   @db.Text
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model jenis_biaya_klaim {
+  id         Int    @id @default(autoincrement()) 
+  jenis      String?   @db.VarChar(255)
+  jumlah     Float?
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model jne_destination {
+  id                     Int       @id @default(autoincrement())
+  id_distributor         Int?
+  iddepo                 Int?
+  OLSHOP_DEST            String?   @db.VarChar(100)
+  OLSHOP_RECEIVER_NAME   String?   @db.VarChar(100)
+  OLSHOP_RECEIVER_ADDR1  String?   @db.Text
+  OLSHOP_RECEIVER_ADDR2  String?   @db.VarChar(250)
+  OLSHOP_RECEIVER_ADDR3  String?   @db.VarChar(250)
+  OLSHOP_RECEIVER_CITY   String?   @db.VarChar(100)
+  OLSHOP_RECEIVER_REGION String?   @db.VarChar(100)
+  OLSHOP_RECEIVER_ZIP    String?   @db.VarChar(100)
+  OLSHOP_RECEIVER_PHONE  String?   @db.VarChar(100)
+  created_at             DateTime? @db.DateTime(0)
+  updated_at             DateTime? @db.DateTime(0)
+  status                 Int?      @db.TinyInt
+  OLSHOP_ORIG            String?   @db.VarChar(100)
+}
+
+model jne_detail_transaction {
+  id              Int       @id @default(autoincrement())
+  jne_transaction Int?
+  iddepo          Int?
+  kode_customer   String?   @db.VarChar(50)
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+}
+
+model jne_origin {
+  id                    Int       @id @default(autoincrement())
+  api_url               String?   @db.VarChar(250)
+  username              String?   @db.VarChar(100)
+  api_key               String?   @db.VarChar(100)
+  OLSHOP_BRANCH         String?   @db.VarChar(100)
+  OLSHOP_CUST           String?   @db.VarChar(100)
+  OLSHOP_SHIPPER_NAME   String?   @db.VarChar(100)
+  OLSHOP_SHIPPER_ADDR1  String?   @db.Text
+  OLSHOP_SHIPPER_ADDR2  String?   @db.VarChar(250)
+  OLSHOP_SHIPPER_ADDR3  String?   @db.VarChar(250)
+  OLSHOP_SHIPPER_CITY   String?   @db.VarChar(100)
+  OLSHOP_SHIPPER_REGION String?   @db.VarChar(100)
+  OLSHOP_SHIPPER_ZIP    String?   @db.VarChar(10)
+  OLSHOP_SHIPPER_PHONE  String?   @db.VarChar(20)
+  OLSHOP_COD_FLAG       String?   @db.VarChar(10)
+  OLSHOP_COD_AMOUNT     String?   @db.VarChar(100)
+  OLSHOP_ORIG           String?   @db.VarChar(20)
+  OLSHOP_INST           String?   @db.VarChar(10)
+  created_at            DateTime? @db.DateTime(0)
+  updated_at            DateTime? @db.DateTime(0)
+  status                Int?      @db.TinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model jne_transaction {
+  id                Int       @id @default(autoincrement())
+  OLSHOP_ORDERID    String?   @db.VarChar(100)
+  OLSHOP_INS_FLAG   String?   @db.VarChar(5)
+  OLSHOP_SERVICE    String?   @db.VarChar(5)
+  OLSHOP_QTY        Int?
+  OLSHOP_WEIGHT     Float?
+  OLSHOP_GOODSDESC  String?   @db.VarChar(250)
+  OLSHOP_GOODSVALUE Int?
+  OLSHOP_GOODSTYPE  String?   @db.VarChar(2)
+  origin_id         Int?
+  destination_id    Int?
+  created_at        DateTime? @db.DateTime(0)
+  updated_at        DateTime? @db.DateTime(0)
+  cnote_no          String?   @db.VarChar(100)
+  id_regional       Int?
+  nama_regional     String?   @db.VarChar(100)
+  iddepo            Int?
+  nama_depo         String?   @db.VarChar(100)
+  type              String?   @db.VarChar(100)
+}
+
+model jobs {
+  id           Int     @id @default(autoincrement())
+  queue        String? @db.VarChar(250)
+  payload      String? @db.LongText
+  attempts     Int?    @db.UnsignedTinyInt
+  reserved_at  Int?
+  available_at Int?
+  created_at   Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model karyawan {
+  id                     Int    @id @default(autoincrement()) 
+  distributor            Int?
+  nik                    String?   @db.VarChar(255)
+  nama                   String?   @db.VarChar(255)
+  email                  String?   @db.VarChar(255)
+  no_hp                  String?   @db.VarChar(255)
+  deleted                DateTime? @db.Timestamp(0)
+  created_at             DateTime? @db.Timestamp(0)
+  updated_at             DateTime? @db.Timestamp(0)
+  id_salesman_mss        String?   @db.VarChar(50)
+  nama_salesman_mss      String?   @db.VarChar(250)
+  iddepo                 Int?
+  status                 Int?
+  kode_sales_distributor String?   @db.VarChar(200)
+  sales_grosir           Int?
+  kode_alias             String?   @db.VarChar(100)
+  kategori               String?   @db.VarChar(100)
+  tipe_salesman          String?   @db.VarChar(100)
+  pola_kunjungan         Int?
+  join_date              DateTime? @db.Date
+  resign_date            DateTime? @db.Date
+  id_user_mss            Int?
+  vendor                 Int?
+
+  @@index([distributor, nik, iddepo, kode_sales_distributor], map: "karyawan_distributor_IDX")
+  @@index([id_salesman_mss], map: "karyawan_id_salesman_mss_IDX")
+  @@index([kode_sales_distributor], map: "karyawan_kode_sales_distributor_IDX")
+  @@index([nik], map: "karyawan_nik_IDX")
+}
+
+model karyawan_contact {
+  id         Int    @id @default(autoincrement())
+  nik        String?   @db.VarChar(100)
+  nama       String?   @db.VarChar(100)
+  nomor      String?   @db.VarChar(100)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+  jabatan    String?   @db.VarChar(30)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model karyawan_has_depo {
+  id     Int  @id @default(autoincrement()) 
+  nik    String? @db.VarChar(255)
+  iddepo Int?
+}
+
+model karyawan_has_distributor {
+  id                 Int    @id @default(autoincrement())
+  nik                String?   @db.VarChar(100)
+  id_distributor     Int?
+  id_distributor_mss Int?
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model karyawanmap {
+  id                Int  @id @default(autoincrement()) 
+  nik               String? @db.VarChar(255)
+  nama              String? @db.VarChar(255)
+  id_salesman_mss   String? @db.VarChar(50)
+  nama_salesman_mss String? @db.VarChar(250)
+  iddepo            String? @db.VarChar(250)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model klaim {
+  id                  Int    @id @default(autoincrement()) 
+  document            Int?
+  no_transaksi        String?   @db.VarChar(255)
+  distributor         Int?
+  nama_distributor    String?   @db.VarChar(255)
+  iddepo              Int?
+  nama_depo           String?   @db.VarChar(255)
+  bulan_closing       Int?
+  tahun_closing       Int?
+  status              String?   @db.VarChar(255)
+  nik_approval        String?   @db.VarChar(255)
+  remark              String?   @db.VarChar(1000)
+  remark_header       String?   @db.Text
+  approvaldate        DateTime? @db.DateTime(0)
+  tanggal_pengajuan   DateTime? @db.Date
+  created_at          DateTime? @db.Timestamp(0)
+  updated_at          DateTime? @db.Timestamp(0)
+  salesman            Int?
+  nama_salesman       String?   @db.VarChar(200)
+  hari_kerja          Int?
+  hari_kerja_approved Int?
+  detail_approval     String?   @db.Text
+  tgl_awal            DateTime? @db.Date
+  tgl_akhir           DateTime? @db.Date
+  hari_kerja_efektif  Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model klaim_bukti_transfer {
+  id               Int    @id @default(autoincrement()) 
+  document         Int?
+  kode             String?   @db.VarChar(255)
+  distributor      Int?
+  nama_distributor String?   @db.VarChar(255)
+  iddepo           Int?
+  nama_depo        String?   @db.VarChar(255)
+  foto             String?   @db.Text
+  path_foto        String?   @db.Text
+  bulan            Int?
+  tahun            Int?
+  remarks          String?   @db.Text
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model klaim_item {
+  id                              Int    @id @default(autoincrement()) 
+  klaim                           Int?
+  biaya_klaim                     Int?
+  biaya_klaim_tipe_biaya          String?   @db.VarChar(100)
+  biaya_klaim_nominal             Float?
+  biaya_klaim_nominal_prosentase  Float?
+  biaya_klaim_is_not_editable     Int?      @db.TinyInt
+  biaya_klaim_nominal_distributor Float?
+  jenis_biaya                     Int?
+  biaya                           String?   @db.VarChar(255)
+  file                            String?   @db.VarChar(1000)
+  path                            String?   @db.VarChar(1000)
+  nominal                         Float?
+  nominal_approved                Float?
+  nominal_akhir                   Float?
+  created_at                      DateTime? @db.Timestamp(0)
+  updated_at                      DateTime? @db.Timestamp(0)
+  remarks                         String?   @db.VarChar(200)
+  detail_approval                 String?   @db.VarChar(100)
+  hari_kerja                      Int?
+  hari_kerja_approved             Int?
+  hari_kerja_efektif              Int?
+}
+
+model koordinat_qr {
+  id                   Int @id @default(autoincrement()) 
+  verifikasi_qr        Int?
+  survey_pasar_id      Int?
+  location_latitude_1  Float?
+  location_longitude_1 Float?
+  location_latitude_2  Float?
+  location_longitude_2 Float?
+  location_latitude_3  Float?
+  location_longitude_3 Float?
+  location_latitude_4  Float?
+  location_longitude_4 Float?
+  radius               Float?
+}
+
+model limit_qty_order {
+  id              Int    @id @default(autoincrement()) 
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(255)
+  id_survey_pasar Int?
+  kode            String?   @db.VarChar(255)
+  qty             Float?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+  rute_id         Int?
+}
+
+model log_close_order {
+  id           Int    @id @default(autoincrement()) 
+  nik          String?   @db.VarChar(255)
+  tanggal_sesi DateTime? @db.Date
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+}
+
+model log_export_order {
+  id             Int       @id @default(autoincrement())
+  id_depo        Int?
+  id_salesman    String?   @db.VarChar(100)
+  nama_salesman  String?   @db.VarChar(250)
+  tanggal_awal   DateTime? @db.Date
+  tanggal_akhir  DateTime? @db.Date
+  mode           String?   @db.VarChar(250)
+  total_exported Int?
+  created_by     String?   @db.VarChar(100)
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+}
+
+model log_export_order_detail {
+  id                Int       @id @default(autoincrement())
+  export_order      Int?
+  order             Int?
+  no_order          String?   @db.VarChar(200)
+  nama_toko         String?   @db.VarChar(250)
+  kode_toko         String?   @db.VarChar(250)
+  tanggal_transaksi DateTime? @db.Date
+  id_survey_pasar   Int?
+  created_at        DateTime? @db.DateTime(0)
+  updated_at        DateTime? @db.DateTime(0)
+}
+
+model log_koordinat_qr_outlet {
+  id                   Int    @id @default(autoincrement()) 
+  survey_pasar_id      Int?
+  location_latitude_1  Float?
+  location_longitude_1 Float?
+  location_latitude_2  Float?
+  location_longitude_2 Float?
+  location_latitude_3  Float?
+  location_longitude_3 Float?
+  location_latitude_4  Float?
+  location_longitude_4 Float?
+  iddepo               Int?
+  created_at           DateTime? @db.DateTime(0)
+  updated_at           DateTime? @db.DateTime(0)
+}
+
+model log_map_sales {
+  id                   Int    @id @default(autoincrement()) 
+  order                Int?
+  id_survey_pasar      Int?
+  nama_customer        String?   @db.VarChar(255)
+  kode_customer        String?   @db.VarChar(255)
+  iddepo               Int?
+  nama_depo            String?   @db.VarChar(255)
+  id_salesman          String?   @db.VarChar(255)
+  nama_salesman        String?   @db.VarChar(255)
+  latitude             Float?
+  longitude            Float?
+  created_at           DateTime? @db.Timestamp(0)
+  updated_at           DateTime? @db.Timestamp(0)
+  jarak                String?   @db.VarChar(100)
+  kategori_koordinat   String?   @db.VarChar(100)
+  status_map           String?   @db.VarChar(100)
+  alamat_awal          String?   @db.VarChar(255)
+  alamat_akhir         String?   @db.VarChar(255)
+  status_order         String?   @db.VarChar(255)
+  location_type        String?   @db.VarChar(100)
+  location_type_before String?   @db.VarChar(100)
+  allowance_pasar      Float?
+}
+
+model log_outlet_anonimus {
+  id                 Int    @id @default(autoincrement()) 
+  outlet_anonimus_id Int       @db.UnsignedInt
+  id_depo            Int       @db.UnsignedInt
+  id_survey_pasar    Int?      @db.UnsignedInt
+  nama_customer      String?   @db.VarChar(255)
+  kode_customer      String?   @db.VarChar(200)
+  updated_at         DateTime? @db.DateTime(0)
+  created_at         DateTime? @db.DateTime(0)
+  deleted_at         DateTime? @db.DateTime(0)
+  status             String?   @db.VarChar(100)
+  visit_date         DateTime? @db.DateTime(0)
+  alamat             String?   @db.VarChar(255)
+  salesman           String?   @db.VarChar(255)
+  id_sales_mss       Int?
+  nota               String?   @db.VarChar(200)
+  rute_id            Int?
+  salesman_rute      String?   @db.VarChar(250)
+  nik_se             String?   @db.VarChar(100)
+  lat                Float?
+  lng                Float?
+  approve_at         DateTime? @db.DateTime(0)
+  approve_by         String?   @db.VarChar(20)
+  ket_reject         String?   @db.VarChar(100)
+}
+
+model log_pindah_rute {
+  id               Int    @id @default(autoincrement()) 
+  survey_pasar_id  Int?
+  mrdo_prev        Int?
+  mrdo_current     Int?
+  created_at       DateTime? @db.DateTime(0)
+  updated_at       DateTime? @db.DateTime(0)
+  keterangan       String?   @db.VarChar(100)
+  rute_prev        Int?
+  rute_current     Int?
+  rutename_prev    String?   @db.VarChar(200)
+  rutename_current String?   @db.VarChar(200)
+}
+
+model log_running_insentif {
+  id         Int    @id @default(autoincrement()) 
+  nik        String?   @db.VarChar(255)
+  deleted    DateTime? @db.Timestamp(0)
+  message    String?   @db.Text
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  iddepo     Int?
+  tahun      Int?
+  bulan      Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model log_rute_outlet {
+  id              Int    @id @default(autoincrement()) 
+  rute_id         Int?
+  rute_detail_id  Int?
+  survey_pasar_id Int?
+  kode_customer   String?   @db.VarChar(255)
+  nama_outlet     String?   @db.VarChar(255)
+  dataar          Int?
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(200)
+  deleted         DateTime? @db.Timestamp(0)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  tgl_rute        DateTime? @db.Date
+  keterangan      String?   @db.VarChar(255)
+}
+
+model log_tools_user {
+  id                    Int       @id @default(autoincrement())
+  action                String?   @db.VarChar(100)
+  id_user               Int?
+  nama_user             String?   @db.VarChar(100)
+  keterangan            String?   @db.VarChar(100)
+  modul                 String?   @db.VarChar(100)
+  mrdo_id               Int?
+  survey_pasar_id       Int?
+  rute_id_prev          Int?
+  rute_id_current       Int?
+  rute                  String?   @db.VarChar(100)
+  nama_customer_prev    String?   @db.VarChar(100)
+  nama_customer_current String?   @db.VarChar(100)
+  kode_customer_prev    String?   @db.VarChar(100)
+  kode_customer_current String?   @db.VarChar(100)
+  depo_prev             String?   @db.VarChar(100)
+  depo_current          String?   @db.VarChar(100)
+  salesman              String?   @db.VarChar(100)
+  id_pasar_prev         Int?
+  id_pasar_current      Int?
+  location_type         String?   @db.VarChar(100)
+  created_at            DateTime? @db.Timestamp(0)
+  updated_at            DateTime? @db.Timestamp(0)
+  deleted_at            DateTime? @db.Timestamp(0)
+}
+
+model log_tools_validasi_koordinat {
+  id                 Int       @id @default(autoincrement())
+  id_survey_pasar    Int
+  location_latitude  Float?
+  location_longitude Float?
+  executed_user      String?   @db.VarChar(100)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model log_validasi_koordinat_outlet {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_salesman     Int?
+  id_survey_pasar Int?
+  nama_toko       String?   @db.VarChar(100)
+  kode_toko       String?   @db.VarChar(100)
+  id_pasar        Int?
+  latitude        Float?
+  longitude       Float?
+  latitude_dest   Float?
+  longitude_dest  Float?
+  jarak           String?   @db.VarChar(100)
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+  id_depo         Int?
+  nama_depo       String?   @db.VarChar(200)
+  tgl_transaksi   DateTime? @db.Date
+  status          String?   @db.VarChar(10)
+}
+
+model mapping_master_produk {
+  id               Int    @id @default(autoincrement()) 
+  iddepo           String?   @db.VarChar(255)
+  kodebarangdepo   String?   @db.VarChar(255)
+  kodebarangmotasa String?   @db.VarChar(255)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  deleted          DateTime? @db.Timestamp(0)
+  nama_depo        String?   @db.VarChar(255)
+  produk           Int?
+  distributor      Int?
+  nama_barang_depo String?   @db.VarChar(255)
+  kode_varian_depo String?   @db.VarChar(255)
+
+  @@index([kodebarangdepo], map: "mapping_master_produk_kodebarangdepo_IDX")
+  @@index([kodebarangmotasa], map: "mapping_master_produk_kodebarangmotasa_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_biaya_klaim {
+  id                 Int    @id @default(autoincrement()) 
+  iddepo             Int?
+  nama_depo          String?   @db.VarChar(255)
+  jenis_biaya        Int?
+  biaya              String?   @db.VarChar(255)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  tipe_biaya         String?   @db.VarChar(100)
+  nominal            Float?
+  nominal_prosentase Float?
+  is_not_editable    Int?      @db.TinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_convert_outlet {
+  id                Int     @id @default(autoincrement())
+  id_outlet_mas     Int?
+  nama_outlet_mas   String? @db.VarChar(150)
+  id_outlet_verda   Int?
+  nama_outlet_verda String? @db.VarChar(150)
+  kode_customer     String? @db.VarChar(100)
+  nama_customer     String? @db.VarChar(150)
+  jenis             String? @db.VarChar(20)
+  id_salesman       Int?
+  salesman          String? @db.VarChar(150)
+
+  @@index([id_outlet_mas, kode_customer], map: "master_convert_outlet_id_outlet_mas_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_convert_outlet_drop {
+  id                Int     @id @default(autoincrement())
+  id_outlet_mas     Int?
+  nama_outlet_mas   String? @db.VarChar(150)
+  id_outlet_verda   Int?
+  nama_outlet_verda String? @db.VarChar(150)
+  kode_customer     String? @db.VarChar(100)
+  nama_customer     String? @db.VarChar(150)
+  jenis             String? @db.VarChar(20)
+  id_salesman       Int?
+  salesman          String? @db.VarChar(150)
+
+  @@index([id_outlet_mas, kode_customer], map: "master_convert_outlet_id_outlet_mas_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_customer_top {
+  id              Int    @id @default(autoincrement())
+  iddepo          Int?
+  nik             Int?
+  id_survey_pasar Int?
+  kode_customer   String?   @db.VarChar(100)
+  top             Int?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+  deleted_at      DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_depo {
+  id             Int    @id @default(autoincrement()) 
+  nama_depo      String?   @db.VarChar(255)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  deleted        DateTime? @db.Timestamp(0)
+  iddepo         Int?
+  alamat         String?   @db.VarChar(200)
+  id_distributor Int?
+}
+
+model master_ekpedisi_retur {
+  id         Int    @id @default(autoincrement())
+  name       String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+}
+
+model master_harga_produk {
+  id              Int    @id @default(autoincrement()) 
+  produk_satuan   Int?
+  iddepo          String?   @db.VarChar(255)
+  tglberlaku      DateTime? @db.Date
+  basedorder      String?   @db.VarChar(255)
+  konversi1       Float?
+  konversi2       Float?
+  satuan1         String?   @default("0") @db.VarChar(255)
+  satuan2         String?   @default("0") @db.VarChar(255)
+  satuan3         String?   @db.VarChar(255)
+  harga1          Float?
+  harga2          Float?
+  harga3          Float?
+  harga4          Float?
+  harga5          Float?
+  harga6          Float?
+  harga7          Float?
+  harga8          Float?
+  harga3ppn       Float?
+  hargabeli       Float?
+  sathargabeli    String?   @db.VarChar(255)
+  hargabelippn    Float?
+  satharga3       String?   @db.VarChar(255)
+  satharga2       String?   @db.VarChar(255)
+  satharga1       String?   @db.VarChar(255)
+  chusr           String?   @db.VarChar(255)
+  chtime          DateTime? @db.Timestamp(0)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted         DateTime? @db.Timestamp(0)
+  nama_depo       String?   @db.VarChar(200)
+  parent          Int?
+  detail_penyebut String?   @db.Text
+  distributor     Int?
+
+  @@index([iddepo], map: "master_harga_produk_iddepo_IDX")
+}
+
+model master_holiday {
+  id           Int       @id @default(autoincrement())
+  holiday_date DateTime? @db.Date
+  holiday_day  String?   @db.VarChar(20)
+  remarks      String?   @db.VarChar(50)
+}
+
+model master_jenis_biaya {
+  id         Int    @id @default(autoincrement()) 
+  biaya      String?   @db.VarChar(255)
+  remarks    String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  flags      String?   @db.VarChar(50)
+}
+
+model master_keterangan_visit {
+  id         Int       @id @default(autoincrement())
+  kode       String    @db.VarChar(50)
+  keterangan String    @db.VarChar(100)
+  tipe       String    @db.VarChar(50)
+  created_at DateTime? @db.DateTime(0)
+  created_by String?   @db.VarChar(50)
+  updated_at DateTime? @db.DateTime(0)
+  updated_by String?   @db.VarChar(50)
+  deleted_at DateTime? @db.DateTime(0)
+  deleted_by String?   @db.VarChar(50)
+}
+
+model master_outlet_bypass {
+  id           Int    @id @default(autoincrement())
+  kode_outlet  String?   @db.VarChar(50)
+  id_pasar     Int?
+  id_depo      Int?
+  ass          String?   @db.VarChar(100)
+  foto         String?   @db.Text
+  keterangan   String?   @db.Text
+  created_at   DateTime? @db.DateTime(0)
+  updated_at   DateTime? @db.DateTime(0)
+  id_qr_outlet String?   @db.VarChar(100)
+  deleted      DateTime? @db.Timestamp(0)
+}
+
+model master_produk {
+  id                 Int    @id @default(autoincrement()) 
+  kode               String?   @db.VarChar(255)
+  tgl_reg            DateTime? @db.Date
+  kdgudang           String?   @db.VarChar(255)
+  approve            String?   @db.VarChar(255)
+  aktif              String?   @default("1") @db.VarChar(255)
+  fast               String?   @default("3") @db.VarChar(255)
+  slow               String?   @default("3") @db.VarChar(255)
+  namasingkat        String?   @db.VarChar(255)
+  konversi1          Float?    @default(0)
+  konversi2          Float?    @default(0)
+  discount           Float?    @default(0)
+  satuanberat        String?   @db.VarChar(255)
+  satuan1            String?   @db.VarChar(255)
+  satuan2            String?   @db.VarChar(255)
+  satuan3            String?   @db.VarChar(255)
+  acc                String?   @db.VarChar(255)
+  min                Float?    @default(0)
+  eff                Float?    @default(0)
+  max                Float?    @default(0)
+  tipeppn            String?   @db.VarChar(255)
+  barcode            String?   @db.VarChar(255)
+  chusr              String?   @db.VarChar(255)
+  chtime             DateTime? @db.Timestamp(0)
+  grupinv            String?   @db.VarChar(255)
+  foto               String?   @db.VarChar(255)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted            DateTime? @db.Timestamp(0)
+  urutan             Int?
+  foto_path          String?   @db.Text
+  harga_renteng_smd  Float?
+  qty_renceng_to_sct Float?
+  qty_krt_in_sct     Float?
+  qty_pack_in_sct    Float?
+  id_produk_mss      Int?
+  pack_in_renceng    Float?
+  harga_renteng_mmd  Float?
+}
+
+model master_produk_has_harga_beli {
+  id                 Int    @id @default(autoincrement()) 
+  kode_produk_motasa String?   @db.VarChar(255)
+  iddepo             Int?
+  harga_beli_pcs     Float?
+  harga_beli_pak     Float?
+  harga_beli_rtg     Float?
+  harga_beli_krt     Float?
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted            DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_radius_pasar {
+  id           Int    @id @default(autoincrement()) 
+  id_pasar_mas Int?
+  nama_pasar   String?   @db.VarChar(100)
+  radius       Float?
+  deleted      DateTime? @db.Timestamp(0)
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+  iddepo       Int?
+  nama_depo    String?   @db.VarChar(200)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_rute {
+  id               Int     @id @default(autoincrement())
+  rute             String? @db.VarChar(1000)
+  hari             String? @db.VarChar(100)
+  id_distributor   Int?
+  id_wilayah       Int?
+  KODE_WILAYAH_kab String? @db.VarChar(8)
+  salesman         String? @db.VarChar(150)
+  salesman_id      Int?
+  rute_tipe        String? @db.VarChar(100)
+  rute_asal        String? @db.VarChar(10)
+  periodik         Int?
+  periodik_jenis   String? @db.VarChar(15)
+  is_active        String? @db.VarChar(100)
+}
+
+model master_rute_detail {
+  id                     Int     @id @default(autoincrement())
+  rute_id                Int?
+  KODE_WILAYAH_kecamatan String? @db.VarChar(8)
+  kecamatan              String? @db.VarChar(100)
+  id_pasar               Int?
+  nama_pasar             String? @db.VarChar(100)
+  klasifikasi_pasar      String? @db.VarChar(100)
+  total_outlet           Int?
+  rute_asal              String? @db.VarChar(100)
+}
+
+model master_rute_detail_drop {
+  id                     Int     @id @default(autoincrement())
+  rute_id                Int?
+  KODE_WILAYAH_kecamatan String? @db.VarChar(8)
+  kecamatan              String? @db.VarChar(100)
+  id_pasar               Int?
+  nama_pasar             String? @db.VarChar(100)
+  klasifikasi_pasar      String? @db.VarChar(100)
+  total_outlet           Int?
+  rute_asal              String? @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_rute_detail_outlet {
+  id                         Int       @id @default(autoincrement())
+  rute_id                    Int?
+  rute_detail_id             Int?
+  survey_pasar_id            Int?
+  nama_toko                  String?   @db.VarChar(200)
+  id_klasifikasi_toko        Int?
+  klasifikasi                String?   @db.VarChar(100)
+  location_latitude          String?   @db.VarChar(20)
+  location_longitude         String?   @db.VarChar(20)
+  id_pasar                   Int?
+  rute_asal                  String?   @db.VarChar(10)
+  nama_pemilik               String?   @db.VarChar(200)
+  alamat                     String?   @db.Text
+  gps_validated              Int?      @db.TinyInt
+  foto                       String?   @db.VarChar(100)
+  foto_path                  String?   @db.VarChar(100)
+  gps_validate_date          DateTime? @db.DateTime(0)
+  id_user                    Int?
+  tipe_outlet                String?   @db.VarChar(100)
+  qr_validated               Int?      @db.TinyInt
+  qr_validated_date          DateTime? @db.DateTime(0)
+  qr_validated_id_user       Int?
+  qr_validated_foto          String?   @db.Text
+  qr_validated_approval      Int?      @db.TinyInt
+  qr_validated_approval_date DateTime? @db.DateTime(0)
+  is_outlet_mas              Int?      @db.TinyInt
+
+  @@index([rute_id, rute_detail_id, survey_pasar_id], map: "master_rute_detail_outlet_rute_id_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_rute_detail_outlet_back {
+  id                         Int       @id @default(autoincrement())
+  rute_id                    Int?
+  rute_detail_id             Int?
+  survey_pasar_id            Int?
+  nama_toko                  String?   @db.VarChar(200)
+  id_klasifikasi_toko        Int?
+  klasifikasi                String?   @db.VarChar(100)
+  location_latitude          String?   @db.VarChar(20)
+  location_longitude         String?   @db.VarChar(20)
+  id_pasar                   Int?
+  rute_asal                  String?   @db.VarChar(10)
+  nama_pemilik               String?   @db.VarChar(200)
+  alamat                     String?   @db.Text
+  gps_validated              Int?      @db.TinyInt
+  foto                       String?   @db.VarChar(100)
+  foto_path                  String?   @db.VarChar(100)
+  gps_validate_date          DateTime? @db.DateTime(0)
+  id_user                    Int?
+  tipe_outlet                String?   @db.VarChar(100)
+  qr_validated               Int?      @db.TinyInt
+  qr_validated_date          DateTime? @db.DateTime(0)
+  qr_validated_id_user       Int?
+  qr_validated_foto          String?   @db.Text
+  qr_validated_approval      Int?      @db.TinyInt
+  qr_validated_approval_date DateTime? @db.DateTime(0)
+  is_outlet_mas              Int?      @db.TinyInt
+
+  @@index([rute_id, rute_detail_id, survey_pasar_id], map: "master_rute_detail_outlet_back_rute_id_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_rute_detail_outlet_drop {
+  id                         Int       @id @default(autoincrement())
+  rute_id                    Int?
+  rute_detail_id             Int?
+  survey_pasar_id            Int?
+  nama_toko                  String?   @db.VarChar(200)
+  id_klasifikasi_toko        Int?
+  klasifikasi                String?   @db.VarChar(100)
+  location_latitude          String?   @db.VarChar(20)
+  location_longitude         String?   @db.VarChar(20)
+  id_pasar                   Int?
+  rute_asal                  String?   @db.VarChar(10)
+  nama_pemilik               String?   @db.VarChar(200)
+  alamat                     String?   @db.Text
+  gps_validated              Int?      @db.TinyInt
+  foto                       String?   @db.VarChar(100)
+  foto_path                  String?   @db.VarChar(100)
+  gps_validate_date          DateTime? @db.DateTime(0)
+  id_user                    Int?
+  tipe_outlet                String?   @db.VarChar(100)
+  qr_validated               Int?      @db.TinyInt
+  qr_validated_date          DateTime? @db.DateTime(0)
+  qr_validated_id_user       Int?
+  qr_validated_foto          String?   @db.Text
+  qr_validated_approval      Int?      @db.TinyInt
+  qr_validated_approval_date DateTime? @db.DateTime(0)
+  is_outlet_mas              Int?      @db.TinyInt
+
+  @@index([rute_id, rute_detail_id, survey_pasar_id], map: "master_rute_detail_outlet_rute_id_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_rute_drop {
+  id               Int     @id @default(autoincrement())
+  rute             String? @db.VarChar(1000)
+  hari             String? @db.VarChar(100)
+  id_distributor   Int?
+  id_wilayah       Int?
+  KODE_WILAYAH_kab String? @db.VarChar(8)
+  salesman         String? @db.VarChar(150)
+  salesman_id      Int?
+  rute_tipe        String? @db.VarChar(100)
+  rute_asal        String? @db.VarChar(10)
+  periodik         Int?
+  periodik_jenis   String? @db.VarChar(15)
+  is_active        String? @db.VarChar(100)
+}
+
+model master_status_retur {
+  id         Int    @id @default(autoincrement())
+  name       String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+}
+
+model mdp_checkin {
+  id                Int    @id @default(autoincrement()) 
+  id_tandem_se      Int?
+  nik_se            String?   @db.VarChar(255)
+  distributor       Int?
+  iddepo            Int?
+  survey_pasar_id   Int?
+  tanggal_transaksi DateTime? @db.Date
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mdp_tandem_se {
+  id          Int    @id @default(autoincrement()) 
+  nik_mdp     String?   @db.VarChar(255)
+  nik_se      String?   @db.VarChar(255)
+  distributor Int?
+  iddepo      Int?
+  start_date  DateTime? @db.Date
+  end_date    DateTime? @db.Date
+  is_active   Int?
+  created_at  DateTime? @db.Timestamp(0)
+  created_by  String?   @db.VarChar(255)
+  updated_at  DateTime? @db.Timestamp(0)
+  updated_by  String?   @db.VarChar(255)
+  deleted_at  DateTime? @db.Timestamp(0)
+  deleted_by  String?   @db.VarChar(255)
+}
+
+model membership_outlet {
+  id                   Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_survey_pasar      Int?      @db.UnsignedInt
+  iddepo               Int?      @db.UnsignedInt
+  nama_file_penyerahan String?   @db.VarChar(100)
+  path_penyerahan      String?   @db.VarChar(100)
+  nama_file_pemakaian  String?   @db.VarChar(100)
+  path_pemakaian       String?   @db.VarChar(100)
+  created_at           DateTime? @db.DateTime(0)
+  updated_at           DateTime? @db.DateTime(0)
+}
+
+model menu {
+  id             Int    @id @default(autoincrement()) 
+  nama           String?   @db.VarChar(255)
+  icon           String?   @db.VarChar(255)
+  menu_alias     String?   @db.VarChar(255)
+  url            String?   @db.VarChar(255)
+  parent         String?   @db.VarChar(255)
+  sort           Int?
+  routing_mobile String?   @db.VarChar(255)
+  icon_mobile    String?   @db.VarChar(255)
+  deleted        DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  kode_menu      String?   @db.VarChar(100)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model nomor {
+  id      Int     @id @default(autoincrement())
+  id_depo Int
+  tahun   String  @db.VarChar(4)
+  bulan   String  @db.VarChar(2)
+  prefix  String? @db.VarChar(5)
+  urut    Int
+}
+
+model notification {
+  id            Int    @id @default(autoincrement()) 
+  remarks       String?   @db.VarChar(255)
+  nama_table    String?   @db.VarChar(255)
+  foreign_id    Int?
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  database_asal String?   @db.VarChar(255)
+  read          Int?
+  users         Int?
+  title         String?   @db.VarChar(255)
+}
+
+model okan_over_radius {
+  id              Int    @id @default(autoincrement()) 
+  id_survey_pasar Int?
+  id_pasar        Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(200)
+  jarak           Float?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model open_sesi_order {
+  id           Int    @id @default(autoincrement()) 
+  nik          String?   @db.VarChar(255)
+  tanggal_sesi DateTime? @db.Date
+  status       Int?
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model open_sesi_verifikasi {
+  id           Int    @id @default(autoincrement()) 
+  nik          String?   @db.VarChar(255)
+  tanggal_sesi DateTime? @db.Date
+  status       Int?
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model order {
+  id                 Int    @id @default(autoincrement()) 
+  no_order           String?   @db.VarChar(255)
+  document           Int?
+  nama_toko          String?   @db.VarChar(255)
+  nama_wilayah       String?   @db.VarChar(255)
+  id_survey_pasar    Int?
+  total_rp           Float?
+  total_qty          Float?
+  status             String?   @db.VarChar(255)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  ttd_customer       String?   @db.LongText
+  remarks            String?   @db.VarChar(255)
+  id_salesman        String?   @db.VarChar(50)
+  nama_salesman      String?   @db.VarChar(200)
+  total_transaksi    Float?
+  tgl_transaksi      DateTime? @db.Date
+  top                String?   @db.VarChar(200)
+  diskon             Float?
+  diskon_persentase  Float?
+  sub_total_diskon   Float?
+  total_diskon       Float?
+  closed_order       Int?
+  platform           String?   @db.VarChar(100)
+  open_sesi_order    Int?
+  diskon_total       Int?
+  lama_order         String?   @db.VarChar(100)
+  metode_bayar       String?   @db.VarChar(100)
+  total_qty_crt      Float?
+  id_distributor_mss Int?
+  nama_distributor   String?   @db.VarChar(255)
+  tipe_outlet        String?   @db.VarChar(255)
+  in_rute            Int?      @db.TinyInt
+  tipe_order         String?   @db.VarChar(100)
+  permasalahan       String?   @db.VarChar(200)
+  kode_customer      String?   @db.VarChar(200)
+  is_call            Int?
+  is_exported        Int?      @db.TinyInt
+  mdp_checkin_id     Int?
+
+  @@index([document], map: "order_document_IDX")
+  @@index([id_salesman], map: "order_id_salesman_IDX")
+  @@index([no_order, nama_wilayah, id_salesman, id_distributor_mss, document, id_survey_pasar], map: "order_no_order_IDX")
+  @@index([tgl_transaksi, closed_order], map: "order_tgl_transaksi_IDX")
+}
+
+model order_address {
+  id              Int    @id @default(autoincrement()) 
+  order           Int?
+  nama_toko       String?   @db.VarChar(255)
+  nama_pemilik    String?   @db.VarChar(255)
+  nama_wilayah    String?   @db.VarChar(255)
+  iddepo          Int?
+  no_telp         String?   @db.VarChar(255)
+  kode_pos        String?   @db.VarChar(255)
+  kabupaten       String?   @db.VarChar(255)
+  provinsi        String?   @db.VarChar(255)
+  id_survey_pasar Int?
+  status          String?   @db.VarChar(255)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  ttd_customer    String?   @db.LongText
+  remarks         String?   @db.VarChar(255)
+  tgl_transaksi   DateTime? @db.Date
+  latitude        Float?
+  longitude       Float?
+
+  @@index([order], map: "order_document_IDX")
+  @@index([id_survey_pasar], map: "order_id_salesman_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model order_backup {
+  id                 Int    @id @default(autoincrement()) 
+  no_order           String?   @db.VarChar(255)
+  document           Int?
+  nama_toko          String?   @db.VarChar(255)
+  nama_wilayah       String?   @db.VarChar(255)
+  id_survey_pasar    Int?
+  total_rp           Float?
+  total_qty          Float?
+  status             String?   @db.VarChar(255)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  ttd_customer       String?   @db.LongText
+  remarks            String?   @db.VarChar(255)
+  id_salesman        String?   @db.VarChar(50)
+  nama_salesman      String?   @db.VarChar(200)
+  total_transaksi    Float?
+  tgl_transaksi      DateTime? @db.Date
+  top                String?   @db.VarChar(200)
+  diskon             Float?
+  diskon_persentase  Float?
+  sub_total_diskon   Float?
+  total_diskon       Float?
+  closed_order       Int?
+  platform           String?   @db.VarChar(100)
+  open_sesi_order    Int?
+  diskon_total       Int?
+  lama_order         String?   @db.VarChar(100)
+  metode_bayar       String?   @db.VarChar(100)
+  total_qty_crt      Float?
+  id_distributor_mss Int?
+  nama_distributor   String?   @db.VarChar(255)
+  tipe_outlet        String?   @db.VarChar(255)
+  in_rute            Int?      @db.TinyInt
+  order_backupid     Int?
+
+  @@index([document], map: "order_document_IDX")
+  @@index([id_salesman], map: "order_id_salesman_IDX")
+  @@index([no_order, nama_wilayah, id_salesman, id_distributor_mss, document, id_survey_pasar], map: "order_no_order_IDX")
+  @@index([tgl_transaksi, closed_order], map: "order_tgl_transaksi_IDX")
+}
+
+model order_bermasalah_transaction {
+  id              Int    @id @default(autoincrement())
+  rute_id         Int?
+  id_survey_pasar Int?
+  keterangan      String?   @db.VarChar(300)
+  permasalahan    String?   @db.VarChar(300)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  document        Int?
+  latitude        Float?
+  longitude       Float?
+  status          String?   @db.VarChar(300)
+  nik             String?   @db.VarChar(100)
+  approve_by      String?   @db.VarChar(300)
+  approve_date    DateTime? @db.Timestamp(0)
+  ttd_file        String?   @db.Text
+  rkm             Int?
+  konfirmasi      String?   @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model order_bermasalah_transaction_foto {
+  id                           Int       @id @default(autoincrement()) @db.UnsignedInt
+  order_bermasalah_transaction Int?      @db.UnsignedInt
+  nama_file                    String?   @db.VarChar(100)
+  nama_original_file           String?   @db.VarChar(100)
+  path                         String?   @db.VarChar(100)
+  ext                          String?   @db.VarChar(10)
+  file_server_id               Int?      @db.UnsignedInt
+  server_path                  String?   @db.VarChar(255)
+  created_at                   DateTime? @db.DateTime(0)
+  updated_at                   DateTime? @db.DateTime(0)
+}
+
+model order_bermasalah_transaction_tika {
+  id              Int    @id @default(autoincrement())
+  rute_id         Int?
+  id_survey_pasar Int?
+  keterangan      String?   @db.VarChar(300)
+  permasalahan    String?   @db.VarChar(300)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  document        Int?
+  latitude        Float?
+  longitude       Float?
+  status          String?   @db.VarChar(300)
+  nik             String?   @db.VarChar(100)
+  approve_by      String?   @db.VarChar(300)
+  approve_date    DateTime? @db.Timestamp(0)
+  ttd_file        String?   @db.Text
+  rkm             Int?
+  konfirmasi      String?   @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model order_cek_stok_customer {
+  id              Int    @id @default(autoincrement()) 
+  order           Int?
+  id_survey_pasar Int?
+  kode_customer   String?   @db.VarChar(255)
+  nama_customer   String?   @db.VarChar(255)
+  iddepo          Int?
+  nama_depo       String?   @db.VarChar(255)
+  produk          Int?
+  id_produk_mss   Int?
+  qty_box         Float?
+  qty_pack        Float?
+  qty_sct         Float?
+  harga_box       Float?
+  harga_pack      Float?
+  harga_sct       Float?
+  produk_satuan   Int?
+  harga_produk    Int?
+  harga           Float?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  kodebarangdepo  String?   @db.VarChar(200)
+
+  @@index([order], map: "order_id_IDX")
+}
+
+model order_item {
+  id             Int    @id @default(autoincrement()) 
+  order          Int?
+  produk         Int?
+  qty_box        Float?
+  qty_pcs        Float?
+  harga_box      Float?
+  harga_pcs      Float?
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  id_produk_mss  Int?
+  produk_satuan  Int?
+  harga          Float?
+  harga_produk   Int?
+  kodebarangdepo String?   @db.VarChar(200)
+
+  @@index([order, produk], map: "order_item_order_IDX")
+}
+
+model order_pict {
+  id         Int    @id @default(autoincrement()) 
+  nama_foto  String?   @db.VarChar(255)
+  file_pict  String?   @db.LongText
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  order      Int?
+  size       Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model order_product {
+  id                      Int    @id @default(autoincrement()) 
+  order                   Int?
+  produk                  Int?
+  nama_produk             String?   @db.VarChar(200)
+  diskon_produk           Int?
+  qty_total               Float?
+  sub_total               Float?
+  total_diskon            Float?
+  total_diskon_persentase Float?
+  sub_total_diskon        Float?
+  total_akhir             Float?
+  created_at              DateTime? @db.Timestamp(0)
+  updated_at              DateTime? @db.Timestamp(0)
+  qty_total_crt           Float?
+  kodebarangdepo          String?   @db.VarChar(200)
+  harga                   Float?
+  disc1                   Float?
+  disc2                   Float?
+  disc3                   Float?
+  harga_sct               Float?
+  disc2_persentase        Float?
+  disc3_persentase        Float?
+  disc_payment_persentase Float?
+  is_fraud                Int?
+  status_approve          String?   @db.VarChar(100)
+  approval_date           DateTime? @db.DateTime(0)
+  ket_reject              String?   @db.VarChar(250)
+
+  @@index([order, produk], map: "order_product_order_IDX")
+  @@index([produk], map: "order_product_produk_IDX")
+}
+
+model order_tracking {
+  id              Int    @id @default(autoincrement()) 
+  order           Int?
+  id_survey_pasar Int?
+  status          String?   @db.VarChar(255)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  ttd_customer    String?   @db.LongText
+  remarks         String?   @db.VarChar(255)
+  tgl_transaksi   DateTime? @db.Date
+
+  @@index([order], map: "order_document_IDX")
+  @@index([id_survey_pasar], map: "order_id_salesman_IDX")
+}
+
+model outlet_anonimus {
+  id              Int    @id @default(autoincrement()) 
+  id_depo         Int       @db.UnsignedInt
+  id_survey_pasar Int?      @db.UnsignedInt
+  nama_customer   String?   @db.VarChar(255)
+  kode_customer   String?   @db.VarChar(200)
+  updated_at      DateTime? @db.DateTime(0)
+  created_at      DateTime? @db.DateTime(0)
+  deleted_at      DateTime? @db.DateTime(0)
+  status          String?   @db.VarChar(100)
+  visit_date      DateTime? @db.DateTime(0)
+  alamat          String?   @db.VarChar(255)
+  salesman        String?   @db.VarChar(255)
+  id_sales_mss    Int?
+  nota            String?   @db.VarChar(200)
+  rute_id         Int?
+  salesman_rute   String?   @db.VarChar(250)
+  nik_se          String?   @db.VarChar(100)
+  lat             Float?
+  lng             Float?
+  approve_at      DateTime? @db.DateTime(0)
+  approve_by      String?   @db.VarChar(20)
+  ket_reject      String?   @db.VarChar(100)
+  id_pasar        Int?
+  nama_pasar      String?   @db.VarChar(250)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model outlet_anonimus_foto {
+  id                 Int       @id @default(autoincrement()) @db.UnsignedInt
+  outlet_anonimus    Int?      @db.UnsignedInt
+  nama_file          String?   @db.VarChar(100)
+  nama_original_file String?   @db.VarChar(100)
+  path               String?   @db.VarChar(100)
+  ext                String?   @db.VarChar(10)
+  file_server_id     Int?      @db.UnsignedInt
+  server_path        String?   @db.VarChar(255)
+  created_at         DateTime? @db.DateTime(0)
+  updated_at         DateTime? @db.DateTime(0)
+}
+
+model outlet_anonimus_has_koordinat {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  outlet_anonimus Int?      @db.UnsignedInt
+  lat             Float?
+  lng             Float?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+  status          String?   @db.VarChar(100)
+  jarak           String?   @db.VarChar(100)
+  radius          String?   @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model outlet_extra_call {
+  id              Int    @id @default(autoincrement()) 
+  kode_customer   String?   @db.VarChar(255)
+  id_salesman     Int?
+  iddepo          Int?
+  date_extra_call DateTime? @db.Date
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  id_survey_pasar Int?
+  kode_toko       String?   @db.VarChar(255)
+  nama_toko       String?   @db.VarChar(255)
+  status          String?   @db.VarChar(100)
+  is_call         String?   @db.VarChar(100)
+}
+
+model outlet_khusus {
+  id            Int       @id @default(autoincrement())
+  id_qr_outlet  Int?
+  kode_customer String?   @db.VarChar(100)
+  nama_toko     String?   @db.VarChar(100)
+  alamat        String?   @db.Text
+  segment       String?   @db.VarChar(10)
+  nik           String?   @db.VarChar(20)
+  salesman      String?   @db.VarChar(50)
+  iddepo        Int?
+  diskon        Int?
+  created_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+  deleted_at    DateTime? @db.DateTime(0)
+}
+
+model outlet_non_se {
+  id            Int     @id @default(autoincrement())
+  kode_customer String? @db.VarChar(100)
+  nama_toko     String? @db.VarChar(100)
+  alamat        String? @db.Text
+  segment       String? @db.VarChar(10)
+  nik           String? @db.VarChar(20)
+}
+
+model pendataan_outlet {
+  id              Int    @id @default(autoincrement()) 
+  id_depo         Int       @db.UnsignedInt
+  id_survey_pasar Int?      @db.UnsignedInt
+  no_ktp          String?   @db.VarChar(50)
+  foto            String?   @db.VarChar(100)
+  path            String?   @db.VarChar(250)
+  updated_at      DateTime? @db.DateTime(0)
+  created_at      DateTime? @db.DateTime(0)
+  deleted_at      DateTime? @db.DateTime(0)
+}
+
+model penerimaan_qr_membership {
+  id                  Int       @id @default(autoincrement())
+  document_penerimaan String?   @db.VarChar(100)
+  tipe                String?   @db.VarChar(100)
+  id_pasar            Int?
+  nama_pasar          String?   @db.VarChar(100)
+  nik_salesman        String?   @db.VarChar(100)
+  nama_salesman       String?   @db.VarChar(100)
+  created_at          DateTime? @db.Timestamp(0)
+  updated_at          DateTime? @db.Timestamp(0)
+  deleted_at          String?   @db.VarChar(100)
+  document_pengajuan  String?   @db.VarChar(100)
+  iddepo              Int?
+  nama_depo           String?   @db.VarChar(100)
+}
+
+model pengajuan_qr_membership {
+  id               Int       @id @default(autoincrement())
+  no_pengajuan     String    @db.VarChar(100)
+  tgl_pengajuan    DateTime  @db.DateTime(0)
+  nama_distributor String?   @db.VarChar(100)
+  id_distributor   Int?
+  nama_depo        String?   @db.VarChar(100)
+  iddepo           Int
+  alamat           String?   @db.VarChar(100)
+  penerima         String?   @db.VarChar(100)
+  no_hp_penerima   String?   @db.VarChar(100)
+  no_resi          String?   @db.VarChar(100)
+  pengirim         String?   @db.VarChar(100)
+  departement      String?   @db.VarChar(100)
+  no_hp_pengirim   String?   @db.VarChar(100)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+}
+
+model perjalanan_dinasspv {
+  id_perjalanan_dinas Int    @id @default(autoincrement())
+  periode_bulan       Int?
+  periode_tahun       Int?
+  id_distributor      Int?
+  nama_distributor    String?   @db.VarChar(100)
+  id_wilayah          Int?
+  nama_wilayah        String?   @db.VarChar(50)
+  tgl_berangkat       DateTime? @db.Date
+  tgl_pulang          DateTime? @db.Date
+  berapa_hari_stay    Int?
+  transport_berangkat String?   @db.VarChar(50)
+  transport_pulang    String?   @db.VarChar(50)
+  kegiatan            String?   @db.VarChar(250)
+  keterangan          String?   @db.Text
+  namaspv             String?   @db.VarChar(50)
+  keperluan_hotel     Int?
+  keperluan_tiket     Int?
+  approve_disetujui   Int?
+  created_at          DateTime? @default(now()) @db.Timestamp(0)
+  nama_pasar          String?   @db.VarChar(250)
+  approve_rsm         String?   @db.VarChar(100)
+  approve_rsm_date    DateTime? @db.DateTime(0)
+  updated_at          DateTime? @db.DateTime(0)
+  deleted_at          DateTime? @db.DateTime(0)
+}
+
+model produk_renceng_to_pak {
+  id             Int    @id @default(autoincrement()) 
+  kodeproduk     String?   @db.VarChar(255)
+  renceng        Float?
+  sct            Int?
+  harga_renceng  Float?
+  crt_to_renceng Float?
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model produk_satuan {
+  id                   Int    @id @default(autoincrement()) 
+  kode_produk          String?   @db.VarChar(255)
+  satuan               Int?
+  satuan_terkecil      Int?
+  deleted              DateTime? @db.Timestamp(0)
+  created_at           DateTime? @db.Timestamp(0)
+  updated_at           DateTime? @db.Timestamp(0)
+  qty                  Float?
+  produk_satuan_parent Int?
+}
+
+model produk_stok {
+  id          Int    @id @default(autoincrement()) 
+  distributor Int?
+  produk      Int?
+  qty_total   Float?
+  remarks     String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  iddepo      Int?
+  nama_depo   String?   @db.VarChar(200)
+}
+
+model produk_stok_item {
+  id            Int    @id @default(autoincrement()) 
+  produk_satuan Int?
+  qty           Int?
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  produk_stok   Int?
+}
+
+model qr_bermasalah_foto {
+  id                 Int       @id @default(autoincrement())
+  id_qr_bermasalah   Int
+  nama_file          String?   @db.VarChar(100)
+  nama_original_file String?   @db.VarChar(100)
+  path               String?   @db.VarChar(100)
+  ext                String?   @db.VarChar(100)
+  file_server_id     Int?
+  server_path        String?   @db.VarChar(100)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+  type_foto          String?   @db.VarChar(100)
+}
+
+model qr_outlet_rusak {
+  id              Int    @id @default(autoincrement()) 
+  id_depo         Int       @db.UnsignedInt
+  id_survey_pasar Int?      @db.UnsignedInt
+  remarks         String?   @db.VarChar(250)
+  foto            String?   @db.VarChar(100)
+  path            String?   @db.VarChar(250)
+  updated_at      DateTime? @db.DateTime(0)
+  created_at      DateTime? @db.DateTime(0)
+  deleted_at      DateTime? @db.DateTime(0)
+  status          String?   @db.VarChar(100)
+  nik             String?   @db.VarChar(100)
+}
+
+model realisasi_qr {
+  id            Int    @id @default(autoincrement()) 
+  id_outlet     Int?
+  nama_outlet   String?   @db.VarChar(255)
+  id_qr_outlet  Int?
+  id_depo       Int?
+  nama_depo     String?   @db.VarChar(255)
+  file          String?   @db.LongText
+  approved_by   String?   @db.VarChar(255)
+  detail_proses String?   @db.LongText
+  dokumen       Int?
+  status        String?   @db.VarChar(255)
+  remarks       String?   @db.LongText
+  foto          String?   @db.VarChar(255)
+  foto_path     String?   @db.VarChar(255)
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  deleted       DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model registrasi_outlet {
+  id                        Int    @id @default(autoincrement()) 
+  document                  Int?
+  id_wilayah                Int       @db.UnsignedInt
+  nama_wilayah              String?   @db.VarChar(300)
+  id_pasar                  Int?      @db.UnsignedInt
+  nama_pasar                String?   @db.VarChar(300)
+  id_jam_operasional        Int?      @db.UnsignedInt
+  jam_operasional           String?   @db.VarChar(300)
+  id_hari_pasar_buka        Int?      @db.UnsignedInt
+  hari                      String?   @db.VarChar(300)
+  id_ukuran_jalan_pasar     Int?      @db.UnsignedInt
+  ukuran_jalan              String?   @db.VarChar(300)
+  nama_toko                 String?   @db.VarChar(100)
+  alamat                    String?   @db.Text
+  pemilik                   String?   @db.VarChar(100)
+  no_ktp                    String?   @db.VarChar(50)
+  no_telp                   String?   @db.VarChar(150)
+  location_latitude         String?   @db.VarChar(20)
+  location_longitude        String?   @db.VarChar(20)
+  id_klasifikasi_toko       Int?      @db.UnsignedInt
+  klasifikasi_toko          String?   @db.VarChar(300)
+  id_jenis_toko             Int?      @db.UnsignedInt
+  jenis_toko                String?   @db.VarChar(300)
+  id_area                   Int?      @db.UnsignedInt
+  area                      String?   @db.VarChar(300)
+  id_user                   Int?      @db.UnsignedInt
+  nik_user                  String?   @db.VarChar(255)
+  is_verified               Int?      @db.TinyInt
+  verified_code             String?   @db.VarChar(5)
+  verified_at               DateTime? @db.DateTime(0)
+  id_distributor            Int?
+  nama_distributor          String?   @db.VarChar(200)
+  id_kabupaten              String?   @db.VarChar(10)
+  nama_kabupaten            String?   @db.VarChar(100)
+  id_hari_rute              Int?
+  hari_rute                 String?   @db.VarChar(100)
+  jml_kunjungan             Int?
+  keterangan                String?   @db.VarChar(300)
+  nik_approval              String?   @db.VarChar(100)
+  ada_stok                  Int?      @db.TinyInt
+  status                    String?   @db.VarChar(20)
+  detail_proses             String?   @db.Text
+  kode_customer_distributor String?   @db.VarChar(100)
+  id_survey_pasar           Int?
+  updated_at                DateTime? @db.DateTime(0)
+  approval_date             DateTime? @db.Date
+  created_at                DateTime? @db.DateTime(0)
+  deleted_at                DateTime? @db.DateTime(0)
+  remark_reject_nsm         String?   @db.VarChar(200)
+  is_reject                 Int?
+  approved_at               DateTime? @db.Timestamp(0)
+  rejected_at               DateTime? @db.Timestamp(0)
+  kode_kecamatan            String?   @db.VarChar(10)
+  nama_kecamatan            String?   @db.VarChar(100)
+  tipe_outlet               String?   @db.VarChar(100)
+  is_set_code               Int?
+  kode_customer             String?   @db.VarChar(255)
+  rute_id                   Int?
+  nama_rute                 String?   @db.VarChar(200)
+  covered_by                String?   @db.VarChar(100)
+  jam_buka_toko             String?   @db.VarChar(100)
+  jam_tutup_toko            String?   @db.VarChar(100)
+  location_type             String?   @db.VarChar(100)
+  kode_pos                  String?   @db.VarChar(200)
+  kelurahan                 String?   @db.VarChar(255)
+  nama_toko2                String?   @db.VarChar(200)
+  complete                  Int?
+}
+
+model registrasi_outlet_asal_barang {
+  id             Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_registrasi  Int?      @db.UnsignedInt
+  id_asal_barang Int?      @db.UnsignedInt
+  asal_barang    String?   @db.VarChar(100)
+  created_at     DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model registrasi_outlet_foto {
+  id                 Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_registrasi      Int?      @db.UnsignedInt
+  nama_file          String?   @db.VarChar(100)
+  nama_original_file String?   @db.VarChar(100)
+  path               String?   @db.VarChar(100)
+  ext                String?   @db.VarChar(10)
+  file_server_id     Int?      @db.UnsignedInt
+  server_path        String?   @db.VarChar(255)
+  created_at         DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model registrasi_outlet_produk {
+  id            Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_registrasi Int?      @db.UnsignedInt
+  id_produk     Int?      @db.UnsignedInt
+  produk        String?   @db.VarChar(100)
+  created_at    DateTime? @db.DateTime(0)
+}
+
+model registrasi_outlet_produk_setara {
+  id               Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_registrasi    Int?      @db.UnsignedInt
+  id_produk_setara Int?      @db.UnsignedInt
+  produk_setara    String?   @db.VarChar(100)
+  created_at       DateTime? @db.DateTime(0)
+}
+
+model rekap_call {
+  id               Int    @id @default(autoincrement()) 
+  id_salesman      Int?
+  nama_salesman    String?   @db.VarChar(255)
+  id_depo          Int?
+  nama_depo        String?   @db.VarChar(255)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(255)
+  target_ro        Int?
+  target_kandidat  Int?
+  aktual_ro        Int?
+  aktual_kandidat  Int?
+  deleted          DateTime? @db.Timestamp(0)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  tgl_order        DateTime? @db.Date
+  total_ro         Float?
+  rute_id          Int?
+}
+
+model rekening_salesman {
+  id               Int       @id @default(autoincrement())
+  document         Int?
+  no_transaksi     String?   @db.VarChar(20)
+  distributor      Int?
+  nama_distributor String?   @db.VarChar(100)
+  id_depo          Int?
+  nama_depo        String?   @db.VarChar(100)
+  salesman         Int?
+  id_bank          Int?
+  nama_bank        String?   @db.VarChar(100)
+  nama_salesman    String?   @db.VarChar(100)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+  status           String?   @db.VarChar(100)
+  atas_nama        String?   @db.VarChar(100)
+  no_rekening      String?   @db.VarChar(100)
+  nik_approval     String?   @db.VarChar(100)
+  approval_date    DateTime? @db.DateTime(0)
+  tgl_pengajuan    DateTime? @db.Date
+  detail_proses    String?   @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rencana_kerja_mingguan {
+  id                  Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_perjalanan_dinas Int?
+  tgl_input           DateTime? @db.Date
+  id_survey_pasar     Int?
+  kode_customer       String?   @db.VarChar(100)
+  nama_customer       String?   @db.VarChar(100)
+  created_at          DateTime? @db.DateTime(0)
+  updated_at          DateTime? @db.DateTime(0)
+  status              String?   @db.VarChar(100)
+  id_pasar            Int?
+  nama_pasar          String?   @db.VarChar(100)
+  permasalahan        String?   @db.VarChar(100)
+  approved_date       DateTime? @db.DateTime(0)
+  approved_status     Int?      @db.TinyInt
+  nik                 String?   @db.VarChar(100)
+  tipe                String?   @db.VarChar(20)
+  deleted_at          DateTime? @db.DateTime(0)
+  is_visited          Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rencana_kerja_mingguan_backup {
+  id                         Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_perjalanan_dinas_detail Int?
+  id_perjalanan_dinas        Int?
+  tgl_input                  DateTime? @db.Date
+  id_survey_pasar            Int?
+  kode_customer              String?   @db.VarChar(100)
+  nama_customer              String?   @db.VarChar(100)
+  created_at                 DateTime? @db.DateTime(0)
+  updated_at                 DateTime? @db.DateTime(0)
+  status                     String?   @db.VarChar(100)
+  id_pasar                   Int?
+  nama_pasar                 String?   @db.VarChar(100)
+  permasalahan               String?   @db.VarChar(100)
+  approved_date              DateTime? @db.DateTime(0)
+  approved_status            Int?      @db.TinyInt
+  nik                        String?   @db.VarChar(100)
+  tipe                       String?   @db.VarChar(20)
+  deleted_at                 DateTime? @db.DateTime(0)
+  is_visited                 Int?
+}
+
+model rencana_kerja_transaction {
+  id                 Int    @id @default(autoincrement())
+  rute_id            Int?
+  id_survey_pasar    Int?
+  hari_terakhir      String?   @db.VarChar(300)
+  detail_order       String?   @db.VarChar(300)
+  produk_paling_laku String?   @db.VarChar(300)
+  suggest_order      String?   @db.VarChar(300)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  document           Int?
+  latitude           Float?
+  longitude          Float?
+  nik                String?   @db.VarChar(100)
+  rkm                Int?
+  status             String?   @db.VarChar(100)
+  approve_nik        String?   @db.VarChar(100)
+  service_level      String?   @db.VarChar(200)
+  keterangan         String?   @db.VarChar(200)
+  approve_date       DateTime? @db.DateTime(0)
+}
+
+model rencana_kerja_transaction_asal_barang {
+  id                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  rencana_kerja_transaction Int?      @db.UnsignedInt
+  id_asal_barang            Int?      @db.UnsignedInt
+  asal_barang               String?   @db.VarChar(100)
+  created_at                DateTime? @db.DateTime(0)
+  updated_at                DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rencana_kerja_transaction_foto {
+  id                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  rencana_kerja_transaction Int?      @db.UnsignedInt
+  nama_file                 String?   @db.VarChar(100)
+  nama_original_file        String?   @db.VarChar(100)
+  path                      String?   @db.VarChar(100)
+  ext                       String?   @db.VarChar(10)
+  file_server_id            Int?      @db.UnsignedInt
+  server_path               String?   @db.VarChar(255)
+  created_at                DateTime? @db.DateTime(0)
+  updated_at                DateTime? @db.DateTime(0)
+}
+
+model rencana_kerja_transaction_produk {
+  id                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  rencana_kerja_transaction Int?      @db.UnsignedInt
+  produk                    String?   @db.VarChar(100)
+  created_at                DateTime? @db.DateTime(0)
+  updated_at                DateTime? @db.DateTime(0)
+}
+
+model rencana_kerja_transaction_produk_setara {
+  id                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  rencana_kerja_transaction Int?      @db.UnsignedInt
+  produk_setara             String?   @db.VarChar(100)
+  created_at                DateTime? @db.DateTime(0)
+  updated_at                DateTime? @db.DateTime(0)
+}
+
+model rencana_kerja_transaction_stok_produk {
+  id                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  rencana_kerja_transaction Int?      @db.UnsignedInt
+  nama_produk               String?   @db.VarChar(300)
+  kode_produk               String?   @db.VarChar(300)
+  history_order             Float?
+  stok                      Float?
+  harga                     Float?
+  keterangan                String?   @db.VarChar(300)
+  created_at                DateTime? @db.DateTime(0)
+  satuan                    String?   @db.VarChar(100)
+  updated_at                DateTime? @db.DateTime(0)
+  service_level             Float?
+  qty_do                    Float?
+}
+
+model report_do {
+  id                 Int    @id @default(autoincrement()) 
+  nama_depo          String?   @db.VarChar(255)
+  nama_salesman      String?   @db.VarChar(255)
+  id_salesman        String?   @db.VarChar(255)
+  id_distributor_mss Int?
+  id_survey_pasar    Int?
+  kode_customer      String?   @db.VarChar(255)
+  nama_customer      String?   @db.VarChar(255)
+  no_order           String?   @db.VarChar(255)
+  no_faktur          String?   @db.VarChar(255)
+  tgl_faktur         DateTime? @db.Date
+  produk             String?   @db.VarChar(255)
+  kode_produk        String?   @db.VarChar(255)
+  qty                Float?
+  deleted            DateTime? @db.Timestamp(0)
+  created_at         DateTime? @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  working_days       Float?
+  sl_percent         Float?
+  penjualan          Float?
+  iddepo             Int?
+  tgl_order          DateTime? @db.Date
+}
+
+model report_gap_ro_detail {
+  id              Int    @id @default(autoincrement()) 
+  nik             String?   @db.VarChar(255)
+  nama_salesman   String?   @db.VarChar(255)
+  iddepo          Int?
+  depo            String?   @db.VarChar(255)
+  tanggal_cut_off DateTime? @db.Date
+  ro              Float?
+  ao              Float?
+  ro_faktur       Float?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  periode         String?   @db.VarChar(100)
+}
+
+model retur {
+  id            Int    @id @default(autoincrement()) 
+  order         String?   @db.VarChar(255)
+  document      Int?
+  remarks       String?   @db.VarChar(255)
+  tgl_transaksi DateTime? @db.Date
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  no_retur      String?   @db.VarChar(100)
+
+  @@index([order], map: "retur_order_IDX")
+}
+
+model retur_item {
+  id             Int    @id @default(autoincrement()) 
+  retur          Int?
+  produk         Int?
+  id_produk_mss  Int?
+  qty_box        Float?
+  qty_pack       Float?
+  qty_sct        Float?
+  harga_box      Float?
+  harga_pack     Float?
+  harga_sct      Float?
+  produk_satuan  Int?
+  harga_produk   Int?
+  harga          Float?
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  kodebarangdepo String?   @db.VarChar(200)
+
+  @@index([retur], map: "retur_item_retur_IDX")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model retur_product {
+  id             Int    @id @default(autoincrement()) 
+  retur          Int?
+  produk         Int?
+  nama_produk    String?   @db.VarChar(255)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  qty_total      Float?
+  kodebarangdepo String?   @db.VarChar(200)
+
+  @@index([retur], map: "retur_product_retur_IDX")
+}
+
+model retur_transaction {
+  id                   Int    @id @default(autoincrement())
+  id_pengajuan         String?   @db.VarChar(255)
+  no_srbr              String?   @db.VarChar(255)
+  id_distributor       String?   @db.VarChar(255)
+  id_depo              String?   @db.VarChar(255)
+  type_retur           String?   @db.VarChar(255)
+  products_list        String?   @db.Text
+  periode_tahun        String?   @db.VarChar(255)
+  periode_bulan        String?   @db.VarChar(255)
+  average_retur        Float?
+  average_retur_actual Float?
+  id_status_retur      Int?
+  total_crt            Float?
+  created_by           String?   @db.VarChar(255)
+  created_at           DateTime? @db.DateTime(0)
+  updated_at           DateTime? @db.DateTime(0)
+  deleted_at           DateTime? @db.DateTime(0)
+  deleted_by           String?   @db.VarChar(255)
+  remark               String?   @db.VarChar(1255)
+  total_qty_retur      String?   @db.VarChar(255)
+  total_qty_sales      String?   @db.VarChar(255)
+}
+
+model retur_transaction_disposal {
+  id                Int       @id @default(autoincrement())
+  id_retur          Int?
+  id_pengajuan      String?   @db.VarChar(255)
+  id_referensi      String?   @db.VarChar(255)
+  nama_pic          String?   @db.VarChar(255)
+  nomor_pic         String?   @db.VarChar(255)
+  proposal_date     String?   @db.VarChar(255)
+  proposal_time     String?   @db.VarChar(255)
+  foto_lokasi_1     String?   @db.VarChar(255)
+  foto_lokasi_2     String?   @db.VarChar(255)
+  foto_barang       String?   @db.VarChar(255)
+  dokumen_referensi String?   @db.VarChar(255)
+  confirm_time      String?   @db.VarChar(255)
+  confirm_date      String?   @db.VarChar(255)
+  created_at        DateTime? @db.DateTime(0)
+  updated_at        DateTime? @db.DateTime(0)
+  deleted_at        DateTime? @db.DateTime(0)
+  deleted_by        String?   @db.VarChar(255)
+
+  @@index([id_pengajuan], map: "retur_transaction_penyusunan_id_pengajuan_IDX")
+}
+
+model retur_transaction_disposal_report {
+  id                       Int       @id @default(autoincrement())
+  id_retur                 Int?
+  id_pengajuan             String?   @db.VarChar(255)
+  disposal_date            String?   @db.VarChar(255)
+  disposal_time            String?   @db.VarChar(255)
+  foto_lokasi_1            String?   @db.VarChar(255)
+  foto_lokasi_2            String?   @db.VarChar(255)
+  foto_barang              String?   @db.VarChar(255)
+  foto_persiapan_1         String?   @db.VarChar(255)
+  foto_persiapan_2         String?   @db.VarChar(255)
+  foto_persiapan_3         String?   @db.VarChar(255)
+  foto_api_kecil           String?   @db.VarChar(255)
+  foto_api_sedang          String?   @db.VarChar(255)
+  foto_api_besar           String?   @db.VarChar(255)
+  foto_api_menjelang_padam String?   @db.VarChar(255)
+  foto_api_padam           String?   @db.VarChar(255)
+  berita_acara             String?   @db.VarChar(255)
+  created_at               DateTime? @db.DateTime(0)
+  updated_at               DateTime? @db.DateTime(0)
+  deleted_at               DateTime? @db.DateTime(0)
+  deleted_by               String?   @db.VarChar(255)
+
+  @@index([id_pengajuan], map: "retur_transaction_penyusunan_id_pengajuan_IDX")
+}
+
+model retur_transaction_ekspedisi {
+  id                  Int       @id @default(autoincrement())
+  id_retur            Int?
+  id_retur_penyusunan Int?
+  id_pengajuan        String?   @db.VarChar(255)
+  id_ekspedisi        Int?
+  ekspedisi           String?   @db.VarChar(255)
+  nomor_polisi        String?   @db.VarChar(100)
+  driver              String?   @db.VarChar(255)
+  estimasi_pickup     DateTime? @db.Date
+  foto_penerimaan     String?   @db.VarChar(255)
+  pic_motasa          String?   @db.VarChar(255)
+  remark              String?   @db.Text
+  tanggal_diterima    DateTime? @db.Date
+  created_by          String?   @db.VarChar(255)
+  created_at          DateTime? @db.DateTime(0)
+  updated_at          DateTime? @db.DateTime(0)
+  batch_id            String?   @db.VarChar(100)
+}
+
+model retur_transaction_history {
+  id              Int    @id @default(autoincrement())
+  id_retur        Int?
+  id_status_retur Int?
+  remark          String?   @db.VarChar(255)
+  created_by      String?   @db.VarChar(255)
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model retur_transaction_penyusunan {
+  id                Int       @id @default(autoincrement())
+  id_retur          Int?
+  id_pengajuan      String?   @db.VarChar(255)
+  id_referensi      String?   @db.VarChar(255)
+  nama_pic          String?   @db.VarChar(255)
+  nomor_pic         String?   @db.VarChar(255)
+  dokumen_referensi String?   @db.VarChar(255)
+  status_penyusunan Int?      @db.TinyInt
+  remark            String?   @db.Text
+  created_by        String?   @db.VarChar(255)
+  created_at        DateTime? @db.DateTime(0)
+  updated_at        DateTime? @db.DateTime(0)
+  deleted_at        DateTime? @db.DateTime(0)
+  deleted_by        String?   @db.VarChar(255)
+
+  @@index([id_pengajuan], map: "retur_transaction_penyusunan_id_pengajuan_IDX")
+}
+
+model retur_transaction_penyusunan_detail {
+  id            Int    @id @default(autoincrement())
+  id_penyusunan Int?
+  panjang       Float?
+  lebar         Float?
+  tinggi        Float?
+  volume        Float?
+  berat         Float?
+  sku           String?   @db.Text
+  image_path    String?   @db.VarChar(255)
+  created_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+}
+
+model retur_transaction_produk {
+  id                  Int    @id @default(autoincrement())
+  id_retur            Int?
+  kode                String?   @db.VarChar(255)
+  nama                String?   @db.VarChar(255)
+  qty                 Int?
+  qty_crt             Float?
+  ket                 String?   @db.VarChar(255)
+  exp                 String?   @db.VarChar(255)
+  created_at          DateTime? @db.DateTime(0)
+  updated_at          DateTime? @db.DateTime(0)
+  sales_qty           Float?
+  sales_qty_crt       String?   @db.VarChar(255)
+  satuan_produk_sales String?   @db.VarChar(100)
+  persen_retur_actual Float?
+  persen_retur        Float?
+  qty_diterima        Float?
+  diterima_at         DateTime? @db.DateTime(0)
+  qty_actual          Float?
+  qty_actual_crt      Float?
+  qty_diterima_crt    Float?
+  image_path          String?   @db.VarChar(255)
+  ket_diterima        String?   @db.VarChar(100)
+}
+
+model retur_transaction_receipt {
+  id                         Int       @id @default(autoincrement())
+  id_pengajuan               String    @db.VarChar(100)
+  id_retur                   Int
+  kode_produk                String    @db.VarChar(100)
+  nama_produk                String?   @db.VarChar(100)
+  qty_srbr_crt               String?   @db.VarChar(100)
+  klaim_qty_expired          Int?
+  klaim_qty_defect           Int?
+  klaim_crt                  Float?
+  klaim_tanggal_expired      String?   @db.VarChar(100)
+  cant_klaim_qty_expired     Int?
+  cant_klaim_qty_defect      Int?
+  cant_klaim_qty_hama        Int?
+  cant_klaim_qty_other       Int?
+  cant_klaim_tanggal_expired String?   @db.VarChar(100)
+  total_qty_pcs              Int?
+  total_qty_crt              Float?
+  total_selisih_qty          Int?
+  total_selisih_crt          Float?
+  berat_fg                   String?   @db.VarChar(100)
+  berat_karton               String?   @db.VarChar(100)
+  remark                     String?   @db.VarChar(100)
+  created_at                 DateTime? @db.DateTime(0)
+  updated_at                 DateTime? @db.DateTime(0)
+}
+
+model retur_transaction_setting {
+  id             Int    @id @default(autoincrement())
+  id_depo        Int?
+  id_distributor Int?
+  type_retur     String?   @db.VarChar(255)
+  alamat_depo    String?   @db.VarChar(255)
+  cp_1           String?   @db.VarChar(255)
+  hp_1           String?   @db.VarChar(255)
+  cp_2           String?   @db.VarChar(255)
+  hp_2           String?   @db.VarChar(255)
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+}
+
+model rilis_insentif {
+  id            Int    @id @default(autoincrement()) 
+  bulan_closing Int?
+  tahun_closing Int?
+  distributor   Int?
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  start_date    DateTime? @db.Date
+  end_date      DateTime? @db.Date
+}
+
+model rkm_bermasalah {
+  id         Int       @id @default(autoincrement())
+  rkm        Int?
+  keterangan String?   @db.VarChar(100)
+  foto       String?   @db.VarChar(100)
+  ttd        String?   @db.VarChar(100)
+  latitude   Float?
+  longitude  Float?
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+  remarks    String?   @db.Text
+}
+
+model rkm_okan_transaction {
+  id              Int    @id @default(autoincrement())
+  rute_id         Int?
+  id_survey_pasar Int?
+  keterangan      String?   @db.VarChar(300)
+  permasalahan    String?   @db.VarChar(300)
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  document        Int?
+  latitude        Float?
+  longitude       Float?
+  status          String?   @db.VarChar(300)
+  nik             String?   @db.VarChar(100)
+  approve_by      String?   @db.VarChar(300)
+  approve_date    DateTime? @db.Timestamp(0)
+  ttd_file        String?   @db.Text
+  rkm             Int?
+  konfirmasi      String?   @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rkm_okan_transaction_foto {
+  id                   Int       @id @default(autoincrement()) @db.UnsignedInt
+  rkm_okan_transaction Int?      @db.UnsignedInt
+  nama_file            String?   @db.VarChar(100)
+  nama_original_file   String?   @db.VarChar(100)
+  path                 String?   @db.VarChar(100)
+  ext                  String?   @db.VarChar(10)
+  file_server_id       Int?      @db.UnsignedInt
+  server_path          String?   @db.VarChar(255)
+  created_at           DateTime? @db.DateTime(0)
+  updated_at           DateTime? @db.DateTime(0)
+}
+
+model rkm_reguler {
+  id          Int       @id @default(autoincrement())
+  rkm         Int?
+  id_produk   String?   @db.VarChar(50)
+  nama_produk String?   @db.VarChar(100)
+  qty_so      Float?
+  qty_do      Float?
+  created_at  DateTime? @db.DateTime(0)
+  updated_at  DateTime? @db.DateTime(0)
+  qty_stok    Float?
+  remarks     String?   @db.Text
+}
+
+model roles {
+  id         Int    @id @default(autoincrement()) 
+  akses      String?   @db.VarChar(255)
+  deleted    DateTime? @db.Timestamp(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model routing_header {
+  id          Int    @id @default(autoincrement()) 
+  roles       Int?
+  menu        Int?
+  distributor Int?
+  deleted     DateTime? @db.Timestamp(0)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  iddepo      Int?
+  nama_depo   String?   @db.VarChar(255)
+}
+
+model routing_permission {
+  id             Int    @id @default(autoincrement()) 
+  routing_header Int?
+  menu           Int?
+  prev_state     String?   @db.VarChar(255)
+  state          String?   @db.VarChar(255)
+  nik            String?   @db.VarChar(255)
+  is_active      Int?
+  deleted        DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model rpt_detail_rekap_call {
+  id               Int    @id @default(autoincrement())
+  tgl_transaksi    DateTime? @db.Date
+  id_salesman      String?   @db.VarChar(100)
+  nama_salesman    String?   @db.VarChar(100)
+  iddepo           Int?
+  nama_depo        String?   @db.VarChar(100)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(100)
+  nama_toko        String?   @db.VarChar(100)
+  lama_order       String?   @db.VarChar(100)
+  hasil_visit      String?   @db.VarChar(100)
+  keterangan       String?   @db.VarChar(100)
+  tipe_outlet      String?   @db.VarChar(100)
+  waktu            String?   @db.VarChar(100)
+  created_at       DateTime? @db.Timestamp(0)
+}
+
+model rpt_rekapcall_bulanan {
+  id                  Int    @id @default(autoincrement())
+  tgl_transaksi       DateTime? @db.Date
+  id_salesman         String?   @db.VarChar(50)
+  nama_salesman       String?   @db.VarChar(100)
+  iddepo              Int?
+  id_distributor      String?   @db.VarChar(100)
+  nama_depo           String?   @db.VarChar(100)
+  nama_distributor    String?   @db.VarChar(100)
+  call_plan_ro        Int?
+  call_plan_kandidat  Int?
+  aktual_ro           Int?
+  aktual_kandidat     Int?
+  lama_visit_ro       String?   @db.VarChar(50)
+  lama_visit_kandidat String?   @db.VarChar(50)
+  efective_call       Int?
+  call_failed         Int?
+  created_at          DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model sales {
+  id             Int       @id @default(autoincrement())
+  id_sesi_import String?   @default("") @db.VarChar(50)
+  distributor    String?   @default("") @db.VarChar(50)
+  id_distributor Int?      @default(0)
+  depo           String?   @default("") @db.VarChar(50)
+  id_depo        Int?      @default(0)
+  id_sales       Int?      @default(0)
+  id_barang      Int?      @default(0)
+  tanggal        DateTime? @db.Date
+  closing        String?   @default("") @db.VarChar(50)
+  nota           String?   @default("") @db.VarChar(500)
+  kode_customer  String?   @default("") @db.VarChar(50)
+  nama_customer  String?   @default("") @db.VarChar(500)
+  frekuensi      String?   @default("") @db.VarChar(50)
+  alamat         String?   @default("") @db.VarChar(500)
+  pasar          String?   @default("") @db.VarChar(500)
+  kecamatan      String?   @default("") @db.VarChar(500)
+  kabupaten      String?   @default("") @db.VarChar(500)
+  kode_barang    String?   @default("") @db.VarChar(500)
+  nama_barang    String?   @default("") @db.VarChar(500)
+  satuan_produk  String?   @default("") @db.VarChar(500)
+  penjualan      Float?    @default(0.000)
+  nama_salesman  String?   @default("") @db.VarChar(500)
+  rupiah         Float?    @default(0.000)
+  dos            Float?    @default(0)
+  pak            Float?    @default(0)
+  pcs            Float?    @default(0)
+  created_at     DateTime? @db.DateTime(0)
+  update_at      DateTime? @db.DateTime(0)
+  tahun_closing  String?   @default("") @db.VarChar(50)
+  penjualand     Float     @default(0.000)
+  kode_barangd   String?   @default("") @db.VarChar(500)
+  nama_barangd   String?   @default("") @db.VarChar(500)
+  satuan_produkd String?   @default("") @db.VarChar(500)
+  no_order       String?   @db.VarChar(200)
+
+  @@index([closing], map: "closing")
+  @@index([depo], map: "depo")
+  @@index([distributor], map: "distributor")
+  @@index([nama_salesman], map: "nama_salesman")
+  @@index([tahun_closing], map: "tahun_closing")
+}
+
+model sales_has_target {
+  id          Int    @id @default(autoincrement()) 
+  id_salesman Int?
+  target      Float?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model sales_temp {
+  id                     Int       @id @default(autoincrement())
+  id_sesi_import         String?   @default("") @db.VarChar(50)
+  distributor            String?   @default("") @db.VarChar(50)
+  id_distributor         Int?      @default(0)
+  depo                   String?   @default("") @db.VarChar(50)
+  id_depo                Int?      @default(0)
+  id_sales               Int?      @default(0)
+  id_barang              Int?      @default(0)
+  tanggal                DateTime? @db.Date
+  closing                String?   @default("") @db.VarChar(50)
+  nota                   String?   @default("") @db.VarChar(500)
+  kode_customer          String?   @default("") @db.VarChar(50)
+  nama_customer          String?   @default("") @db.VarChar(500)
+  frekuensi              String?   @default("") @db.VarChar(50)
+  alamat                 String?   @default("") @db.VarChar(500)
+  pasar                  String?   @default("") @db.VarChar(500)
+  kecamatan              String?   @default("") @db.VarChar(500)
+  kabupaten              String?   @default("") @db.VarChar(500)
+  kode_barang            String?   @default("") @db.VarChar(500)
+  nama_barang            String?   @default("") @db.VarChar(500)
+  satuan_produk          String?   @default("") @db.VarChar(500)
+  penjualan              Float?    @default(0.000)
+  nama_salesman          String?   @default("") @db.VarChar(500)
+  kode_sales_distributor String?   @default("") @db.VarChar(500)
+  rupiah                 Float?    @default(0.000)
+  dos                    Float?    @default(0)
+  pak                    Float?    @default(0)
+  pcs                    Float?    @default(0)
+  created_at             DateTime? @db.DateTime(0)
+  update_at              DateTime? @db.DateTime(0)
+  tahun_closing          String?   @default("") @db.VarChar(50)
+  penjualand             Float     @default(0.000)
+  kode_barangd           String?   @default("") @db.VarChar(500)
+  nama_barangd           String?   @default("") @db.VarChar(500)
+  satuan_produkd         String?   @default("") @db.VarChar(500)
+  no_order               String?   @db.VarChar(200)
+  updated_at             DateTime? @db.DateTime(0)
+  id_se                  String?   @db.VarChar(100)
+  call_failed            String?   @db.VarChar(100)
+  m15                    String?   @db.VarChar(100)
+
+  @@index([closing], map: "closing")
+  @@index([depo], map: "depo")
+  @@index([distributor], map: "distributor")
+  @@index([nama_salesman], map: "nama_salesman")
+  @@index([tahun_closing], map: "tahun_closing")
+}
+
+model salesao {
+  id               Int    @id @default(autoincrement()) 
+  kode_customer    String?   @db.VarChar(255)
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  id_survey_pasar  Int?
+  kode_barang      String?   @db.VarChar(255)
+  kode_toko        String?   @db.VarChar(255)
+  nama_toko        String?   @db.VarChar(255)
+  juml             Float?
+  jenis            String?   @db.VarChar(100)
+}
+
+model salesao_summary {
+  id          Int    @id @default(autoincrement()) 
+  bulan       Int?
+  tahun       Int?
+  id_salesman Int?
+  iddepo      Int?
+  jum         Float?
+  ec          Float?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model salesao_summary_ec_detail_customer {
+  id            Int    @id @default(autoincrement()) 
+  kode_customer String?   @db.VarChar(200)
+  kode_barang   String?   @db.VarChar(200)
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  id_salesman   Int?
+  iddepo        Int?
+  bulan         Int?
+  tahun         Int?
+}
+
+model salesao_summary_jum_detail_customer {
+  id            Int    @id @default(autoincrement()) 
+  kode_customer String?   @db.VarChar(200)
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  id_salesman   Int?
+  iddepo        Int?
+  bulan         Int?
+  tahun         Int?
+}
+
+model salesec_summary {
+  id          Int    @id @default(autoincrement()) 
+  bulan       Int?
+  tahun       Int?
+  id_salesman Int?
+  iddepo      Int?
+  jum         Float?
+  ec          Float?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model salesec_summary_produk {
+  id          Int    @id @default(autoincrement()) 
+  bulan       Int?
+  tahun       Int?
+  id_salesman Int?
+  iddepo      Int?
+  jum         Float?
+  kode_barang String?   @db.VarChar(200)
+  ec          Float?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model salesec_summary_produk_has_nota {
+  id          Int    @id @default(autoincrement()) 
+  bulan       Int?
+  tahun       Int?
+  id_salesman Int?
+  iddepo      Int?
+  kode_barang String?   @db.VarChar(200)
+  nota        String?   @db.VarChar(200)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model salesman_has_kontrol_face {
+  id         Int    @id @default(autoincrement()) 
+  nik        String?   @db.VarChar(255)
+  iddepo     Int?
+  status     String?   @db.VarChar(100)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model satuan {
+  id          Int    @id @default(autoincrement()) 
+  nama_satuan String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  deleted     DateTime? @db.Timestamp(0)
+  urutan      Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model setting_order {
+  id                     Int    @id @default(autoincrement()) 
+  iddepo                 Int?
+  nama_depo              String?   @db.VarChar(255)
+  qrcode                 Int?
+  geotagging             Int?
+  cek_stok               Int?
+  radius                 Float?
+  created_at             DateTime? @db.Timestamp(0)
+  updated_at             DateTime? @db.Timestamp(0)
+  deleted_at             DateTime? @db.Timestamp(0)
+  follow_so              Int?
+  follow_do              Int?
+  visible_harga          Int?
+  service_level          Int?
+  hari_kerja_efektif     Int?
+  hari_kerja_efektif_ext String?   @db.VarChar(100)
+  id_bank                Int?
+  nama_bank              String?   @db.VarChar(255)
+  no_rekening            String?   @db.VarChar(255)
+  an_no_rekening         String?   @db.VarChar(255)
+  bukti_rekening         String?   @db.VarChar(255)
+  bukti_rekening_path    String?   @db.VarChar(255)
+  geo_activated          Int?
+  stock_with_order       Int?
+  distributor            Int?
+  nama_distributor       String?   @db.VarChar(200)
+  cash_kredit            Int?
+  limit_qty_order        Float?
+}
+
+model share_location_sales_order {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_salesman     Int?
+  id_survey_pasar Int?
+  nama_toko       String?   @db.VarChar(100)
+  kode_toko       String?   @db.VarChar(100)
+  id_pasar        Int?
+  latitude        Float?
+  longitude       Float?
+  status          String?   @db.VarChar(100)
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+  id_depo         Int?
+  nama_depo       String?   @db.VarChar(200)
+  tgl_transaksi   DateTime? @db.Date
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model slow_log {
+  start_time     DateTime @default(now()) @db.Timestamp(0)
+  user_host      String   @db.MediumText
+  query_time     DateTime @db.Time(0)
+  lock_time      DateTime @db.Time(0)
+  rows_sent      Int
+  rows_examined  Int
+  db             String   @db.VarChar(512)
+  last_insert_id Int
+  insert_id      Int
+  server_id      Int      @db.UnsignedInt
+  sql_text       String   @db.MediumText
+  thread_id      Int   
+
+  @@ignore
+}
+
+model summary_insentif {
+  id                          Int    @id @default(autoincrement()) 
+  tgl_rilis                   DateTime? @db.Date
+  ro                          Float?
+  target_call                 Float?
+  actual_call                 Float?
+  call_failed                 Float?
+  ao                          Float?
+  volume                      Float?
+  id_salesman_mss             String?   @db.VarChar(255)
+  nama_sales                  String?   @db.VarChar(255)
+  iddepo                      String?   @db.VarChar(255)
+  nama_depo                   String?   @db.VarChar(255)
+  distributor                 String?   @db.VarChar(255)
+  nama_distributor            String?   @db.VarChar(255)
+  created_at                  DateTime? @db.Timestamp(0)
+  updated_at                  DateTime? @db.Timestamp(0)
+  bulan                       Int?
+  tahun                       Int?
+  volumem15                   Float?
+  alias_code                  String?   @db.VarChar(100)
+  rilis_id                    Int?
+  ro_jom                      Float?
+  target_jom                  Float?
+  insentif                    Float?
+  coverage_pasar              Int?
+  pencapaian_jom              Float?
+  ro_jom_kandidat             Float?
+  ro_jom_distributor          Float?
+  ro_jom_kandidat_outstanding Float?
+  ro_jom_reject_sudah_ro      Float?
+  ro_jom_reject_other         Float?
+  target_il                   Int?
+}
+
+model summary_insentif_ao {
+  id               Int    @id @default(autoincrement()) 
+  kodeproduk       String?   @db.VarChar(255)
+  rupiah           Float?
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+model summary_insentif_cektika {
+  id                          Int    @id @default(autoincrement()) 
+  tgl_rilis                   DateTime? @db.Date
+  ro                          Float?
+  target_call                 Float?
+  actual_call                 Float?
+  call_failed                 Float?
+  ao                          Float?
+  volume                      Float?
+  id_salesman_mss             String?   @db.VarChar(255)
+  nama_sales                  String?   @db.VarChar(255)
+  iddepo                      String?   @db.VarChar(255)
+  nama_depo                   String?   @db.VarChar(255)
+  distributor                 String?   @db.VarChar(255)
+  nama_distributor            String?   @db.VarChar(255)
+  created_at                  DateTime? @db.Timestamp(0)
+  updated_at                  DateTime? @db.Timestamp(0)
+  bulan                       Int?
+  tahun                       Int?
+  volumem15                   Float?
+  alias_code                  String?   @db.VarChar(100)
+  rilis_id                    Int?
+  ro_jom                      Float?
+  target_jom                  Float?
+  insentif                    Float?
+  coverage_pasar              Int?
+  pencapaian_jom              Float?
+  ro_jom_kandidat             Float?
+  ro_jom_distributor          Float?
+  ro_jom_kandidat_outstanding Float?
+  ro_jom_reject_sudah_ro      Float?
+  ro_jom_reject_other         Float?
+  target_il                   Int?
+}
+
+model summary_insentif_has_call_fail {
+  id               Int    @id @default(autoincrement()) 
+  kode_customer    String?   @db.VarChar(255)
+  customer_nota    String?   @db.VarChar(255)
+  no_order         String?   @db.VarChar(255)
+  no_order_nota    String?   @db.VarChar(255)
+  sales_id         Int?
+  summary_insentif Int?
+  nota             String?   @db.VarChar(255)
+  survey_pasar_id  Int?
+  nama_toko        String?   @db.VarChar(255)
+  nama_toko_nota   String?   @db.VarChar(255)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  tgl_so           DateTime? @db.Date
+}
+
+model summary_insentif_has_coverage_pasar {
+  id               Int    @id @default(autoincrement()) 
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  id_pasar         Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model summary_insentif_has_customer {
+  id               Int    @id @default(autoincrement()) 
+  kode_customer    String?   @db.VarChar(255)
+  jumlah           Float?
+  jumlah_faktur    Float?
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  call             Float?
+  id_survey_pasar  Int?
+  nama_toko        String?   @db.VarChar(255)
+  kategori         String?   @db.VarChar(100)
+}
+
+model summary_insentif_has_jom_customer {
+  id               Int    @id @default(autoincrement()) 
+  kode_customer    String?   @db.VarChar(255)
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  id_survey_pasar  Int?
+  id_pasar         Int?
+  nama_pasar       String?   @db.VarChar(255)
+  nama_toko        String?   @db.VarChar(255)
+  source_type      String?   @db.VarChar(100)
+}
+
+model summary_insentif_has_ro {
+  id               Int    @id @default(autoincrement()) 
+  kode_customer    String?   @db.VarChar(255)
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  id_survey_pasar  Int?
+  nama_toko        String?   @db.VarChar(255)
+  id_pasar         Int?
+  nama_pasar       String?   @db.VarChar(255)
+  jenis            String?   @db.VarChar(255)
+}
+
+model summary_insentif_has_target_jom {
+  id               Int    @id @default(autoincrement()) 
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  iddepo           Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  id_pasar         Int?
+  quarter_year     Int?
+  target_jom       Int?
+  target_il        Int?
+}
+
+model summary_insentif_volume {
+  id               Int    @id @default(autoincrement()) 
+  kodeproduk       String?   @db.VarChar(255)
+  qty              Float?
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+model summary_insentif_volume_m15 {
+  id               Int    @id @default(autoincrement()) 
+  kodeproduk       String?   @db.VarChar(255)
+  qty              Float?
+  bulan            Int?
+  tahun            Int?
+  id_salesman      Int?
+  summary_insentif Int?
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+model telescope_entries {
+  sequence                Int                  @id @default(autoincrement()) 
+  uuid                    String                  @unique(map: "telescope_entries_uuid_unique") @db.Char(36)
+  batch_id                String                  @db.Char(36)
+  family_hash             String?                 @db.VarChar(255)
+  should_display_on_index Boolean                 @default(true)
+  type                    String                  @db.VarChar(20)
+  content                 String                  @db.LongText
+  created_at              DateTime?               @db.DateTime(0)
+  telescope_entries_tags  telescope_entries_tags?
+
+  @@index([batch_id], map: "telescope_entries_batch_id_index")
+  @@index([created_at], map: "telescope_entries_created_at_index")
+  @@index([family_hash], map: "telescope_entries_family_hash_index")
+  @@index([type, should_display_on_index], map: "telescope_entries_type_should_display_on_index_index")
+}
+
+model telescope_entries_tags {
+  entry_uuid        String            @id @db.Char(36)
+  tag               String            @db.VarChar(255)
+  telescope_entries telescope_entries @relation(fields: [entry_uuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "telescope_entries_tags_entry_uuid_foreign")
+
+  @@index([entry_uuid, tag], map: "telescope_entries_tags_entry_uuid_tag_index")
+  @@index([tag], map: "telescope_entries_tags_tag_index")
+}
+
+model telescope_monitoring {
+  tag String @id @db.VarChar(255)
+}
+
+model users_permissions {
+  id         Int    @id @default(autoincrement()) 
+  roles      Int?
+  menu       Int?
+  insert     Int?
+  update     Int?
+  delete     Int?
+  view       Int?
+  print      Int?
+  deleted    DateTime? @db.Timestamp(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model users_player {
+  id         Int    @id @default(autoincrement()) 
+  users      Int?
+  player_id  String?   @db.Text
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model vendor {
+  id          Int    @id @default(autoincrement()) 
+  nama_vendor String?   @db.VarChar(255)
+  email       String?   @db.VarChar(255)
+  alamat      String?   @db.VarChar(255)
+  no_hp       String?   @db.VarChar(255)
+  deleted     DateTime? @db.Timestamp(0)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model verifikasi_qr_foto {
+  id            Int    @id @default(autoincrement()) 
+  verifikasi_qr Int?
+  foto          String?   @db.VarChar(255)
+  path          String?   @db.VarChar(255)
+  created_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model verifikasi_qr_outlet {
+  id               Int    @id @default(autoincrement()) 
+  survey_pasar_id  Int?
+  nama_outlet      String?   @db.VarChar(255)
+  id_depo          Int?
+  nama_depo        String?   @db.VarChar(255)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(255)
+  latitude         Float?
+  longitude        Float?
+  input_by         String?   @db.VarChar(100)
+  created_at       DateTime? @db.DateTime(0)
+  updated_at       DateTime? @db.DateTime(0)
+  deleted_at       DateTime? @db.DateTime(0)
+  approved_by      String?   @db.VarChar(50)
+  approved_at      DateTime? @db.DateTime(0)
+  status           Int?      @db.TinyInt
+  keterangan       String?   @db.VarChar(100)
+  flag_qr          Int?      @db.TinyInt
+  flag_geo         Int?      @db.TinyInt
+  status_map       String?   @db.VarChar(100)
+  alamat_awal      String?   @db.VarChar(255)
+  alamat_akhir     String?   @db.VarChar(255)
+  jarak            String?   @db.VarChar(100)
+  center_pasar     String?   @db.VarChar(100)
+  tipe_lokasi      String?   @db.VarChar(100)
+  deleted          DateTime? @db.DateTime(0)
+}
+
+model verifikasi_trial_qr_outlet {
+  id            Int    @id @default(autoincrement()) 
+  verifikasi_qr Int?
+  latitude      Float?
+  longitude     Float?
+  status        String?   @db.VarChar(255)
+  radius        Float?
+  jarak         Float?
+  created_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model visit_kandidat {
+  id               Int    @id @default(autoincrement())
+  id_survey_pasar  Int?
+  nama_toko        String?   @db.VarChar(200)
+  nama_wilayah     String?   @db.VarChar(200)
+  iddepo           Int?
+  status           String?   @db.VarChar(100)
+  reason           String?   @db.VarChar(50)
+  kode_customer    String?   @db.VarChar(50)
+  tgl_visit        DateTime? @db.Date
+  lama_visit       String?   @db.VarChar(100)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(200)
+  id_salesman      String?   @db.VarChar(50)
+  nama_salesman    String?   @db.VarChar(200)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  foto             String?   @db.Text
+
+  @@index([id_distributor], map: "id_distributor")
+  @@index([id_salesman], map: "id_salesman")
+  @@index([id_survey_pasar], map: "id_survey_pasar")
+  @@index([iddepo], map: "iddepo")
+  @@index([nama_distributor], map: "nama_distributor")
+  @@index([nama_salesman], map: "nama_salesman")
+  @@index([tgl_visit], map: "tgl_visit")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model visit_kandidat_copytika {
+  id               Int    @id @default(autoincrement())
+  id_survey_pasar  Int?
+  nama_toko        String?   @db.VarChar(200)
+  nama_wilayah     String?   @db.VarChar(200)
+  iddepo           Int?
+  status           String?   @db.VarChar(100)
+  reason           String?   @db.VarChar(50)
+  kode_customer    String?   @db.VarChar(50)
+  tgl_visit        DateTime? @db.Date
+  lama_visit       String?   @db.VarChar(100)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(200)
+  id_salesman      String?   @db.VarChar(50)
+  nama_salesman    String?   @db.VarChar(200)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  foto             String?   @db.Text
+
+  @@index([id_distributor], map: "id_distributor")
+  @@index([id_salesman], map: "id_salesman")
+  @@index([id_survey_pasar], map: "id_survey_pasar")
+  @@index([iddepo], map: "iddepo")
+  @@index([nama_distributor], map: "nama_distributor")
+  @@index([nama_salesman], map: "nama_salesman")
+  @@index([tgl_visit], map: "tgl_visit")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model visit_kandidat_tika {
+  id               Int    @id @default(autoincrement())
+  id_survey_pasar  Int?
+  nama_toko        String?   @db.VarChar(200)
+  nama_wilayah     String?   @db.VarChar(200)
+  iddepo           Int?
+  status           String?   @db.VarChar(100)
+  reason           String?   @db.VarChar(50)
+  kode_customer    String?   @db.VarChar(50)
+  tgl_visit        DateTime? @db.Date
+  lama_visit       String?   @db.VarChar(100)
+  id_distributor   Int?
+  nama_distributor String?   @db.VarChar(200)
+  id_salesman      String?   @db.VarChar(50)
+  nama_salesman    String?   @db.VarChar(200)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  foto             String?   @db.Text
+
+  @@index([id_distributor], map: "id_distributor")
+  @@index([id_salesman], map: "id_salesman")
+  @@index([id_survey_pasar], map: "id_survey_pasar")
+  @@index([iddepo], map: "iddepo")
+  @@index([nama_distributor], map: "nama_distributor")
+  @@index([nama_salesman], map: "nama_salesman")
+  @@index([tgl_visit], map: "tgl_visit")
+}
+
+model waktu_order {
+  id         Int    @id @default(autoincrement()) 
+  iddepo     Int?
+  nama_depo  String?   @db.VarChar(255)
+  waktu      Int?
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model warehouse {
+  id          Int    @id @default(autoincrement()) 
+  iddepo      Int?
+  nama_depo   String?   @db.VarChar(255)
+  distributor Int?
+  nama_gudang String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  kode        String?   @db.VarChar(200)
+}
