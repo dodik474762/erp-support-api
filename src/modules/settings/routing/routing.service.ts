@@ -81,10 +81,22 @@ export class RoutingService {
   async getDetail(id: string): Promise<any> {
     return this.routingRepo
       .createQueryBuilder('routing_header')
-      .select(['routing_header.*'])
+      .select(['routing_header.*', 'menu.name as menu_name'])
+      .innerJoin('menu', 'menu', 'menu.id = routing_header.menu')
       .where('routing_header.deleted IS NULL')
       .andWhere('routing_header.id = :id', { id: id })
       .getRawOne();
+  }
+  
+  async getDetailItems(id: string): Promise<any> {
+    return this.routingPermissionRepo
+      .createQueryBuilder('routing_permission')
+      .select(['routing_permission.*', 'dictionary.keterangan as type_name', 'users.name as users_name'])
+      .innerJoin('dictionary', 'dictionary', 'dictionary.term_id = routing_permission.state')
+      .innerJoin('users', 'users', 'users.id = routing_permission.users')
+      .where('routing_permission.deleted IS NULL')
+      .andWhere('routing_permission.routing_header = :id', { id: id })
+      .getRawMany();
   }
 
   async countAll(search: any): Promise<any> {

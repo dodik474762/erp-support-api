@@ -76,14 +76,16 @@ export class RoutingController {
     
       @Get('/getDetail')
       async getDetail(@Query('id') id: string): Promise<any> {
-        const result = {
+        const result : any = {
           statusCode: 200,
           is_valid: true,
           data: [],
         };
     
         const data = await this.services.getDetail(id);
+        const items = await this.services.getDetailItems(id);
         result.data = data;
+        result.data.items = items;
         return result;
       }
     
