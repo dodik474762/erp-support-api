@@ -27,6 +27,19 @@ export class MenuController {
     result.data = data;
     return result;
   }
+  
+  @Get('/getAllMenuRouting')
+  async getAllMenuRouting(): Promise<any> {
+    const result = {
+      statusCode: 200,
+      is_valid: true,
+      data: [],
+    };
+
+    const data = await this.menuServices.getAllMenuRouting();
+    result.data = data;
+    return result;
+  }
 
   @Get('/getParent')
   async getParent(): Promise<any> {

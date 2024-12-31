@@ -21,6 +21,15 @@ export class MenuService {
       .where('menu.deleted IS NULL')
       .getRawMany();
   }
+ 
+  async getAllMenuRouting(): Promise<any> {
+    return this.menuRepo
+      .createQueryBuilder('menu')
+      .select(['menu.*'])
+      .where('menu.deleted IS NULL')
+      .andWhere('menu.routing = 1')
+      .getRawMany();
+  }
 
   async getParent(): Promise<any> {
     return this.menuRepo

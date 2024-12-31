@@ -22,6 +22,7 @@ import { ActivityLogModule } from './log/activity_log/activity_log.module';
 import { DictionaryModule } from './modules/master/dictionary/dictionary.module';
 import { CompanyModule } from './modules/company/company.module';
 import { DepartementModule } from './modules/master/departement/departement.module';
+import { RoutingModule } from './modules/settings/routing/routing.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { DepartementModule } from './modules/master/departement/departement.modu
     DictionaryModule,
     CompanyModule,
     DepartementModule,
+    RoutingModule,
   ],
   controllers: [AppController],
   providers: [AppService, {
