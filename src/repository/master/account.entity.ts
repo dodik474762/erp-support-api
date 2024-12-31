@@ -11,13 +11,31 @@ export class Account{
     id:number;
 
     @Column()
-    code:string;
+    account_code:string;
 
     @Column()
-    name:string;
+    account_name:string;
     
     @Column()
-    context:string;
+    account_type:string;
+
+    @Column()
+    parent_account_id:number;
+
+    @Column()
+    account_balance:string;
+
+    @Column()
+    is_active:number;
+
+    @Column()
+    currency_code:string;
+
+    @Column()
+    is_system_generated:number;
+
+    @Column()
+    remarks:string;
 
     @Column()
     created_at:Date;

@@ -23,6 +23,7 @@ import { DictionaryModule } from './modules/master/dictionary/dictionary.module'
 import { CompanyModule } from './modules/company/company.module';
 import { DepartementModule } from './modules/master/departement/departement.module';
 import { RoutingModule } from './modules/settings/routing/routing.module';
+import { AccountModule } from './modules/data/account/account.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { RoutingModule } from './modules/settings/routing/routing.module';
     CompanyModule,
     DepartementModule,
     RoutingModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService, {
