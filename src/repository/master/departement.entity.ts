@@ -2,25 +2,19 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity("menu")
-export class Menu{
+@Entity("department")
+export class Department{
     @PrimaryGeneratedColumn()
     id:number;
 
     @Column()
-    menu_code:string;
+    code:string;
 
     @Column()
-    name:string;
+    department_name:string;
     
     @Column()
-    icon:string;
-    
-    @Column()
-    path:string;
-    
-    @Column()
-    parent:string;
+    remarks:string;    
 
     @Column()
     created_at:Date;
@@ -30,7 +24,4 @@ export class Menu{
 
     @Column()
     updated_at:Date;
-
-    @Column()
-    routing:number;
 }

@@ -1,9 +1,9 @@
 FROM node:20
 
-RUN mkdir hris-api
-RUN cd hris-api
+RUN mkdir erp-support-api
+RUN cd erp-support-api
 
-WORKDIR /hris-api
+WORKDIR /erp-support-api
 
 COPY . .
 

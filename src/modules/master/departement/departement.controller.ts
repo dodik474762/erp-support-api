@@ -1,25 +1,17 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import { QuestionsDescribeService } from './questions_describe.service';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { DepartementService } from './departement.service';
 import { JwtAuthGuard } from 'src/modules/auth/auth.guard';
 
 @UseGuards(JwtAuthGuard)
-@Controller('/api/data/questions-describe')
-// @UseGuards(JwtAuthGuard)
-export class QuestionsDescribeController {
-  constructor(private questionService: QuestionsDescribeService) {}
+@Controller('/api/master/department')
+export class DepartementController {
+  constructor(private services: DepartementService) {}
 
   @Get('/')
   index(): any {
     return {
       statusCode: 200,
-      message: 'Module Questions Describe',
+      message: 'Module Departement',
     };
   }
 
@@ -31,7 +23,20 @@ export class QuestionsDescribeController {
       data: [],
     };
 
-    const data = await this.questionService.getAll();
+    const data = await this.services.getAll();
+    result.data = data;
+    return result;
+  }
+
+  @Get('/getParent')
+  async getParent(): Promise<any> {
+    const result = {
+      statusCode: 200,
+      is_valid: true,
+      data: [],
+    };
+
+    const data = await this.services.getParent();
     result.data = data;
     return result;
   }
@@ -53,16 +58,20 @@ export class QuestionsDescribeController {
       search: search,
       page: Number(page) + 1,
       limit: Number(limit),
-      total_page:isNaN(Number(limit)) ? 0 : await this.questionService.countAll(search),
+      total_page: isNaN(Number(limit))
+        ? 0
+        : await this.services.countAll(search),
     };
 
-    const data = isNaN(Number(limit)) ? [] : await this.questionService.get(
-      order,
-      search,
-      Number(page) + 1,
-      Number(limit),
-      filterdate,
-    );
+    const data = isNaN(Number(limit))
+      ? []
+      : await this.services.get(
+          order,
+          search,
+          Number(page) + 1,
+          Number(limit),
+          filterdate,
+        );
     result.data = data;
     return result;
   }
@@ -75,20 +84,7 @@ export class QuestionsDescribeController {
       data: [],
     };
 
-    const data = await this.questionService.getDetail(id);
-    result.data = data;
-    return result;
-  }
-
-  @Get('/get-list-answer')
-  async getListAnswer(@Query('questions') questions: string): Promise<any> {
-    const result = {
-      statusCode: 200,
-      is_valid: true,
-      data: [],
-    };
-
-    const data = await this.questionService.getListAnswer(questions);
+    const data = await this.services.getDetail(id);
     result.data = data;
     return result;
   }
@@ -96,32 +92,28 @@ export class QuestionsDescribeController {
   @Post('/submit')
   async submit(
     @Body('id') id: string,
-    @Body('questions') questions: string,
+    @Body('name') name: string,
     @Body('remarks') remarks: string,
-    @Body('test') test: { value: string; label: string },
-    @Body('test_sub') test_sub: { value: string; label: string },
-    @Body('answers') answers: any[],
   ): Promise<any> {
-    const data = {
+    const data: any = {
       id: id,
-      questions: questions,
+      department_name: name,
       remarks: remarks,
-      test: test.value,
-      test_sub: test_sub.value,
-      answers: answers,
       created_at: new Date(),
       updated_at: new Date(),
     };
+
+    if (id == '') {
+      data.code = await this.services.generateCode();
+    }
+
     let result = {
       statusCode: 200,
       is_valid: false,
       message: 'Failed',
-      data: data
     };
-
-    // console.log(result);
     try {
-      result = await this.questionService.save(data);
+      result = await this.services.save(data);
     } catch (error) {
       result.message = String(error);
     }
@@ -140,7 +132,7 @@ export class QuestionsDescribeController {
     };
 
     try {
-      result.data = await this.questionService.delete(id);
+      result.data = await this.services.delete(id);
       result.is_valid = true;
       result.message = 'Success';
     } catch (error) {
@@ -159,7 +151,7 @@ export class QuestionsDescribeController {
       data: null,
     };
     try {
-      result.data = await this.questionService.deleteAll(id);
+      result.data = await this.services.deleteAll(id);
       result.is_valid = true;
       result.message = 'Success';
     } catch (error) {

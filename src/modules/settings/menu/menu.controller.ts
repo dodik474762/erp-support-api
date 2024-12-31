@@ -94,6 +94,7 @@ export class MenuController {
     @Body('name') name: string,
     @Body('icon') icon: string,
     @Body('path') path: string,
+    @Body('routing') routing: boolean,
     @Body('parent') parent: { value: string; label: string },
   ): Promise<any> {
     const data: any = {
@@ -109,6 +110,7 @@ export class MenuController {
           : null,
       created_at: new Date(),
       updated_at: new Date(),
+      routing: routing == true ? 1 : 0
     };
 
     if (id == '') {

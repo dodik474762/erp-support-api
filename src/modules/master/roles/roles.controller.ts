@@ -47,7 +47,7 @@ export class RolesController {
             search: search,
             page: Number(page) +1,
             limit: Number(limit),
-            total_page : await this.rolesServices.countAll(search)
+            total_page : isNaN(Number(limit)) ? 0 : await this.rolesServices.countAll(search)
         };
 
         const data = isNaN(Number(limit)) ? [] : await this.rolesServices.get(order, search, Number(page) +1, Number(limit), filterdate);

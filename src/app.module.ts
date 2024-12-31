@@ -19,18 +19,9 @@ import { PermissionModule } from './modules/settings/permission/permission.modul
 import { PassportModule } from '@nestjs/passport';
 import { UnitModule } from './modules/master/unit/unit.module';
 import { ActivityLogModule } from './log/activity_log/activity_log.module';
-import { CandidateTestModule } from './modules/recrutment/candidate_test/candidate_test.module';
-import { JobModule } from './modules/data/job/job.module';
-import { CandidateModule } from './modules/data/candidate/candidate.module';
-import { CandidatesModule } from './modules/applied/candidates/candidates.module';
-import { TestModule } from './modules/data/test/test.module';
 import { DictionaryModule } from './modules/master/dictionary/dictionary.module';
-import { QuestionsModule } from './modules/data/questions/questions.module';
-import { JobTestModule } from './modules/scheduling/job_test/job_test.module';
-import { CandidateTestsModule } from './modules/scheduling/candidate_tests/candidate_tests.module';
-import { SummaryTestCfitModule } from './modules/report/summary_test_cfit/summary_test_cfit.module';
-import { QuestionsDescribeModule } from './modules/data/questions_describe/questions_describe.module';
 import { CompanyModule } from './modules/company/company.module';
+import { DepartementModule } from './modules/master/departement/departement.module';
 
 @Module({
   imports: [
@@ -56,18 +47,9 @@ import { CompanyModule } from './modules/company/company.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),    
     UnitModule,
     ActivityLogModule,
-    CandidateTestModule,
-    JobModule,
-    CandidateModule,
-    CandidatesModule,
-    TestModule,
     DictionaryModule,
-    QuestionsModule,
-    JobTestModule,
-    CandidateTestsModule,
-    SummaryTestCfitModule,
-    QuestionsDescribeModule,
     CompanyModule,
+    DepartementModule,
   ],
   controllers: [AppController],
   providers: [AppService, {
