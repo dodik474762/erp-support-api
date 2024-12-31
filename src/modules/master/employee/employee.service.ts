@@ -56,8 +56,9 @@ export class EmployeeService {
 
     async getDetail(id: string): Promise<any> {
         return this.emplyeeRepo.createQueryBuilder('employee')
-        .select(['employee.*', 'job_title.job_name as job_name'])
+        .select(['employee.*', 'job_title.job_name as job_name', 'department.department_name as department_name'])
         .innerJoin('job_title', 'job_title', 'employee.job_title = job_title.id')
+        .leftJoin('department', 'department', 'employee.department = department.id')
         .where('employee.deleted IS NULL')
         .andWhere('employee.id = :id', { id: id })
         .getRawOne();

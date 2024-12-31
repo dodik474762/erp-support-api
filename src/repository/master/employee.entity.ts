@@ -20,6 +20,9 @@ export class Employee{
     job_title:number;
 
     @Column()
+    department:number;
+
+    @Column()
     created_at:Date;
 
     @Column()

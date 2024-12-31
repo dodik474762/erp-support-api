@@ -78,12 +78,14 @@ export class EmployeeController {
         @Body('name') name: string,
         @Body('address') address: string,
         @Body('job_title') job_title: {value: number, label: string},
+        @Body('department') department: {value: number, label: string},
     ): Promise<any>{
         const data : any= {
             id : id,
             name: name,
             address : address,
             job_title : job_title.value,
+            department: department.value,
             created_at : new Date(),
             updated_at : new Date(),
         };
