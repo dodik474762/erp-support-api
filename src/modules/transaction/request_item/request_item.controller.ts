@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/auth/auth.guard';
 import { RequestItemService } from './request_item.service';
+import { RouteAccService } from 'src/modules/helpers/route_acc/route_acc.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('/api/transaction/request-item')
 export class RequestItemController {
-  constructor(private services: RequestItemService) {}
+  constructor(
+    private services: RequestItemService,
+    private routeAccService: RouteAccService,
+  ) {}
 
   @Get('/')
   index(): any {
@@ -81,8 +85,8 @@ export class RequestItemController {
     @Body('id') id: string,
     @Body('item_name') item_name: string,
     @Body('users') users: string,
-    @Body('account') account: {value: string, label: string},
-    @Body('departement') departement: {value: string, label: string},
+    @Body('account') account: { value: string; label: string },
+    @Body('departement') departement: { value: string; label: string },
     @Body('remarks') remarks: string,
   ): Promise<any> {
     const data: any = {
@@ -98,18 +102,27 @@ export class RequestItemController {
       updated_at: new Date(),
     };
 
+    let create = false;
     if (id == '') {
       data.code = await this.services.generateCode();
       data.item_code = data.code;
+      data.status = 'DRAFT';
+      create = true;
     }
 
-    let result = {
-      statusCode: 200,
+    let result: any = {
+      statusCode: 400,
       is_valid: false,
       message: 'Failed',
     };
     try {
       result = await this.services.save(data);
+      if (create) {
+        const routeAcc = await this.routeAccService.routingCreate(33, null);
+        if(routeAcc){
+            await this.services.updateRouting(routeAcc, result.data.id);
+        }
+      }
     } catch (error) {
       result.message = String(error);
     }

@@ -25,6 +25,7 @@ import { DepartementModule } from './modules/master/departement/departement.modu
 import { RoutingModule } from './modules/settings/routing/routing.module';
 import { AccountModule } from './modules/data/account/account.module';
 import { RequestItemModule } from './modules/transaction/request_item/request_item.module';
+import { RouteAccModule } from './modules/helpers/route_acc/route_acc.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { RequestItemModule } from './modules/transaction/request_item/request_it
     RoutingModule,
     AccountModule,
     RequestItemModule,
+    RouteAccModule,
   ],
   controllers: [AppController],
   providers: [AppService, {

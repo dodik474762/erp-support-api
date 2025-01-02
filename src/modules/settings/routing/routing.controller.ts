@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { RoutingService } from './routing.service';
+import { JwtAuthGuard } from 'src/modules/auth/auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('/api/settings/routing')
 export class RoutingController {
     constructor(private services: RoutingService) {}

@@ -30,7 +30,8 @@ export class RequestItemService {
   ): Promise<any[]> {
     const data = this.requestItemRepo
       .createQueryBuilder('request_item')
-      .select(['request_item.*'])
+      .select(['request_item.*', 'users_next_acc.username as next_acc_name'])
+      .leftJoin('users', 'users_next_acc', 'users_next_acc.id = request_item.next_acc')
       .where('request_item.deleted IS NULL')
       .andWhere(
         new Brackets((qb) => {
@@ -60,7 +61,17 @@ export class RequestItemService {
       .limit(limit)
       .offset((page - 1) * limit);
 
-    return data.getRawMany();
+      const result = [];
+      const datadb = await data.getRawMany();
+      for (let index = 0; index < datadb.length; index++) {
+        const element = datadb[index];
+        element['status'] = element['status'];
+        if(element['next_acc'] != null && element['status'] != 'REJECTED' && element['status'] != 'COMPLETED'){
+          element['status'] = 'WAITING ACC ' + element['next_acc_name'];
+        }
+        result.push(element);
+      }
+    return result;
   }
 
   async getDetail(id: string): Promise<any> {
@@ -122,6 +133,17 @@ export class RequestItemService {
     }
 
     return result;
+  }
+
+  async updateRouting(data: any, id : number){
+    try {        
+        await this.requestItemRepo.update(id, {
+            next_acc: data.users,
+            current_step_acc: null
+        });
+    } catch (error) {
+        console.log(error);
+    }
   }
 
   async delete(id: string): Promise<any> {

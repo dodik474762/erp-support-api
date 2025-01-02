@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Menu } from "./menu.entity";
 
 
 @Entity("routing_permission")
@@ -33,4 +34,8 @@ export class RoutingPermission{
 
     @Column()
     updated_at:Date;
+
+    @OneToOne(() => Menu, (menu) => menu.id)
+    @JoinColumn({name: 'menu'})
+    menu_item: Menu;
 }
