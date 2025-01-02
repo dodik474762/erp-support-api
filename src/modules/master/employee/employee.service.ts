@@ -42,7 +42,7 @@ export class EmployeeService {
                         qb.where(`employee.created_at BETWEEN '${dataDate[0]}' AND '${dataDate[1]}'`);
                     }
                     if (dataDate.length == 1) {
-                        qb.where(`employee(users.created_at as date) = '${dataDate[0]}'`);
+                        qb.where(`cast(employee.created_at as date) = '${dataDate[0]}'`);
                     }
                 }
             })
