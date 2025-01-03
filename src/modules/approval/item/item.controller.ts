@@ -87,21 +87,38 @@ export class ItemController {
   @Post('/submit')
   async submit(
     @Body('id') id: string,
-    @Body('item_name') item_name: string,
-    @Body('users') users: string,
     @Body('account') account: { value: string; label: string },
-    @Body('departement') departement: { value: string; label: string },
+  ): Promise<any> {
+    const data: any = {
+      id: id,
+      account: account.value,
+      account_name: account.label,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    let result: any = {
+      statusCode: 400,
+      is_valid: false,
+      message: 'Failed',
+    };
+    try {
+      result = await this.services.save(data);
+    } catch (error) {
+      result.message = String(error);
+    }
+
+    return result;
+  }
+  
+  @Post('/reject')
+  async reject(
+    @Body('id') id: string,
     @Body('remarks') remarks: string,
   ): Promise<any> {
     const data: any = {
       id: id,
-      users: users,
-      item_name: item_name,
       remarks: remarks,
-      departemen: departement.value,
-      departemen_name: departement.label,
-      account: account.value,
-      account_name: account.label,
       created_at: new Date(),
       updated_at: new Date(),
     };

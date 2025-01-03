@@ -85,7 +85,6 @@ export class RequestItemController {
     @Body('id') id: string,
     @Body('item_name') item_name: string,
     @Body('users') users: string,
-    @Body('account') account: { value: string; label: string },
     @Body('departement') departement: { value: string; label: string },
     @Body('remarks') remarks: string,
   ): Promise<any> {
@@ -96,8 +95,6 @@ export class RequestItemController {
       remarks: remarks,
       departemen: departement.value,
       departemen_name: departement.label,
-      account: account.value,
-      account_name: account.label,
       created_at: new Date(),
       updated_at: new Date(),
     };
