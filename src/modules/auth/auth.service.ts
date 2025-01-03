@@ -60,6 +60,7 @@ export class AuthService {
   async validate(payload) {
     const data = await this.userRepo.findOne({
       where: { username: payload.username },
+      relations: ['roles'],
     });
     return data;
   }

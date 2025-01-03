@@ -113,6 +113,8 @@ export class AuthController {
         const token = await this.authService.login({
           username: username,
           password: password,
+          users_id: validation.id,
+          roles: validation.roles.roles_name,
         });
         result.data = validation;
         result.token = token;
@@ -269,7 +271,7 @@ export class AuthController {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
 
-    let result : any = {
+    let result: any = {
       statusCode: 200,
       is_valid: false,
       message: 'Failed',
