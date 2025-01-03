@@ -56,6 +56,25 @@ export class RouteAccService {
     });
     return data;
   }
+  
+  async routingNextAcc(
+    menu: number,
+    prevState: string,
+  ): Promise<any> {
+    const data = await this.routingPermissionRepo.findOne({
+      where: {
+        deleted: IsNull(),
+        menu: menu,
+        prev_state: prevState,
+        is_active: 1,
+      },
+      relations: ['menu_item'],
+      order: {
+        state: 'ASC',
+      },
+    });
+    return data;
+  }
 
   async checkIsLastRouting(menu: number, prevState: string): Promise<any> {
     const data = await this.routingPermissionRepo.findOne({
@@ -90,8 +109,13 @@ export class RouteAccService {
     try {
       const actors = {
         users: users,
+        latitude: null,
+        longitude: null,
         content: desc,
         action: desc,
+        remarks: desc,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       const actor = await this.actorRepo.save(actors);
@@ -102,6 +126,8 @@ export class RouteAccService {
         no_document: code,
         remarks: remarks,
         state: state,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       await this.docTransRepo.save(logs);

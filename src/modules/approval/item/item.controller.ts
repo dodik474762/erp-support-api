@@ -88,12 +88,13 @@ export class ItemController {
   async submit(
     @Body('id') id: string,
     @Body('account') account: { value: string; label: string },
+    @Req() req: any,
   ): Promise<any> {
+    const user = req.user;
     const data: any = {
       id: id,
       account: account.value,
       account_name: account.label,
-      created_at: new Date(),
       updated_at: new Date(),
     };
 
@@ -103,7 +104,7 @@ export class ItemController {
       message: 'Failed',
     };
     try {
-      result = await this.services.save(data);
+      result = await this.services.save(data, user, this.routeAccService);
     } catch (error) {
       result.message = String(error);
     }
@@ -115,7 +116,9 @@ export class ItemController {
   async reject(
     @Body('id') id: string,
     @Body('remarks') remarks: string,
+    @Req() req: any,
   ): Promise<any> {
+    const user = req.user;
     const data: any = {
       id: id,
       remarks: remarks,
@@ -129,7 +132,7 @@ export class ItemController {
       message: 'Failed',
     };
     try {
-      result = await this.services.save(data);
+      result = await this.services.reject(data, user, this.routeAccService);
     } catch (error) {
       result.message = String(error);
     }

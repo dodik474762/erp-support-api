@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersModel } from 'src/model/users.model';
+import { RouteAccService } from 'src/modules/helpers/route_acc/route_acc.service';
 import { RequestItem } from 'src/repository/transaction/request_item.entity';
 import { Brackets, DataSource, Repository } from 'typeorm';
 
@@ -136,7 +137,11 @@ export class ItemService {
     return data.getCount();
   }
 
-  async save(params): Promise<any> {
+  async save(
+    params,
+    user: UsersModel,
+    routeAccService: RouteAccService,
+  ): Promise<any> {
     const result: any = {
       is_valid: false,
       data: null,
@@ -147,17 +152,113 @@ export class ItemService {
     await queryRunner.startTransaction();
     try {
       const paramsData = params;
-      const insertOrUpdate = params.id != '' && params.id ? 'update' : 'insert';
+      const requestItem = await this.requestItemRepo.findOne({
+        where: {
+          id: paramsData.id,
+        },
+      });
 
-      if (params.id != '' && params.id) {
-        params.updated_at = new Date();
+      const isLastRouting = await routeAccService.checkIsLastRouting(
+        33,
+        requestItem.current_step_acc,
+      );
+      if (isLastRouting) {
+        params.status = 'COMPLETED';
       } else {
-        params.id = null;
+        params.status = 'APPROVED';
       }
-      result.data =
-        insertOrUpdate == 'update'
-          ? await queryRunner.manager.update(RequestItem, paramsData.id, params)
-          : await queryRunner.manager.save(RequestItem, params);
+      params.acc_by = user.users_id;
+      const updateReqItem = await queryRunner.manager.update(
+        RequestItem,
+        paramsData.id,
+        params,
+      );
+      // console.log('updateReqItem', updateReqItem);
+
+      const routingAcc = await routeAccService.routingAcc(
+        user.users_id,
+        33,
+        requestItem.current_step_acc,
+      );
+      if (routingAcc) {
+        const routingNextAcc = await routeAccService.routingNextAcc(33, routingAcc.state);
+        const routeUpdate = {
+          next_acc: routingNextAcc ? routingNextAcc.users : null,
+          current_step_acc: routingAcc.state,
+        };
+        const updateAcc = await queryRunner.manager.update(
+          RequestItem,
+          paramsData.id,
+          routeUpdate,
+        );
+
+        const log = await routeAccService.createLogTransaction(
+          user.users_id,
+          requestItem.code,
+          'APPROVE ITEM',
+          'APPROVE ITEM',
+          'APPROVED',
+        );
+
+        result.data = log;
+        result.update_item = updateReqItem;
+        result.update_acc = updateAcc;
+        result.is_valid = true;
+        result.message = 'Success';
+        result.statusCode = 200;
+        await queryRunner.commitTransaction();
+      } else {
+        result.is_valid = false;
+        result.statusCode = 400;
+        result.message = 'Akun Approval Routing belum di konfigurasi';
+        await queryRunner.rollbackTransaction();
+      }
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      result.message = String(e);
+    } finally {
+      await queryRunner.release();
+    }
+
+    return result;
+  }
+
+  async reject(
+    params,
+    user: UsersModel,
+    routeAccService: RouteAccService,
+  ): Promise<any> {
+    const result: any = {
+      is_valid: false,
+      data: null,
+      message: 'Failed',
+    };
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const paramsData = params;
+      const update = {
+        acc_by: user.users_id,
+        acc_remarks: params.remarks,
+        next_acc: null,
+        current_step_acc: null,
+        status: 'REJECTED',
+      };
+      const requestItem = await this.requestItemRepo.findOne({
+        where: {
+          id: paramsData.id,
+        },
+      });
+      await queryRunner.manager.update(RequestItem, paramsData.id, update);
+
+      await routeAccService.createLogTransaction(
+        user.users_id,
+        requestItem.code,
+        'REJECT ITEM',
+        'REJECT ITEM',
+        'REJECTED',
+      );
 
       result.is_valid = true;
       result.message = 'Success';

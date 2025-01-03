@@ -72,4 +72,7 @@ export class RequestItem{
 
     @Column()
     updated_at:Date;
+
+    @Column()
+    status:string;
 }
