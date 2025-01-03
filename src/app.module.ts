@@ -3,8 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ValidationModule } from './validation/validation.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RoleGuard } from './role/role.guard';
 import { WebsocketModule } from './websocket/websocket.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetsModule } from './assets/assets.module';
@@ -60,10 +58,7 @@ import { RouteAccModule } from './modules/helpers/route_acc/route_acc.module';
     RouteAccModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_GUARD,
-    useClass: RoleGuard
-  },],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

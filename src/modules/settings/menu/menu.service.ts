@@ -137,6 +137,8 @@ export class MenuService {
       } else {
         params.id = menus.length > 0 ? menus[0].id + 1 : null;
       }
+
+      console.log('menus',params.id);
       result.data =
         insertOrUpdate == 'update'
           ? await queryRunner.manager.update(Menu, paramsData.id, params)
