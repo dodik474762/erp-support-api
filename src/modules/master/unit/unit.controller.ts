@@ -45,10 +45,10 @@ export class UnitController {
             search: search,
             page: Number(page) +1,
             limit: Number(limit),
-            total_page : await this.unitServices.countAll(search)
+            total_page : isNaN(Number(limit)) ? 0 : await this.unitServices.countAll(search)
         };
 
-        const data = await this.unitServices.get(order, search, Number(page) +1, Number(limit), filterdate);
+        const data = isNaN(Number(limit)) ? [] : await this.unitServices.get(order, search, Number(page) +1, Number(limit), filterdate);
         result.data = data;
         return result;
     }
@@ -79,10 +79,6 @@ export class UnitController {
             created_at : new Date(),
             updated_at : new Date(),
         };
-
-        if (id == '') {
-            data.code = await this.unitServices.generateCode();
-        }
 
         let result = {
             statusCode: 200,

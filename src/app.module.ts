@@ -25,6 +25,7 @@ import { AccountModule } from './modules/data/account/account.module';
 import { RequestItemModule } from './modules/transaction/request_item/request_item.module';
 import { RouteAccModule } from './modules/helpers/route_acc/route_acc.module';
 import { ItemModule } from './modules/approval/item/item.module';
+import { ProductTypeModule } from './modules/master/product_type/product_type.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { ItemModule } from './modules/approval/item/item.module';
     RequestItemModule,
     RouteAccModule,
     ItemModule,
+    ProductTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,16 +2,16 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity("unit")
-export class Unit{
+@Entity("product_type")
+export class ProductType{
     @PrimaryGeneratedColumn()
     id:number;
 
     @Column()
-    remarks:string;
+    type:string;
 
     @Column()
-    name:string;
+    remarks:string;
 
     @Column()
     created_at:Date;

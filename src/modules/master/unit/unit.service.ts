@@ -27,7 +27,7 @@ export class UnitService {
         .andWhere(
             new Brackets((qb) => {
                 qb.where(`unit.name LIKE '%${search}%'`)
-                .orWhere(`unit.code LIKE '%${search}%'`);
+                .orWhere(`unit.remarks LIKE '%${search}%'`);
             })
         )
         .andWhere(
@@ -65,7 +65,7 @@ export class UnitService {
         .andWhere(
             new Brackets((qb) => {
                 qb.where(`unit.name LIKE '%${search}%'`)
-                .orWhere(`unit.code LIKE '%${search}%'`);
+                .orWhere(`unit.remarks LIKE '%${search}%'`);
             })
         )
         .getCount();        
@@ -135,7 +135,7 @@ export class UnitService {
         const data = await this.unitRepo.createQueryBuilder('unit')
         .select(['unit.*'])
         .where('unit.deleted IS NULL')
-        .andWhere(`unit.code LIKE '${no}%'`)
+        .andWhere(`unit.remarks LIKE '${no}%'`)
         .orderBy({ created_at: 'DESC' })
         .limit(1)
         .getRawOne();
