@@ -26,6 +26,13 @@ import { RequestItemModule } from './modules/transaction/request_item/request_it
 import { RouteAccModule } from './modules/helpers/route_acc/route_acc.module';
 import { ItemModule } from './modules/approval/item/item.module';
 import { ProductTypeModule } from './modules/master/product_type/product_type.module';
+import { VolumeTypeModule } from './modules/master/volume_type/volume_type.module';
+import { GroupTypeModule } from './modules/master/group_type/group_type.module';
+import { ReplanishmentMethodModule } from './modules/master/replanishment_method/replanishment_method.module';
+import { CostCategoryModule } from './modules/master/cost_category/cost_category.module';
+import { PlanningItemModule } from './modules/master/planning_item/planning_item.module';
+import { SubsidiaryModule } from './modules/master/subsidiary/subsidiary.module';
+import { TaxScheduleModule } from './modules/master/tax_schedule/tax_schedule.module';
 
 @Module({
   imports: [
@@ -60,6 +67,13 @@ import { ProductTypeModule } from './modules/master/product_type/product_type.mo
     RouteAccModule,
     ItemModule,
     ProductTypeModule,
+    VolumeTypeModule,
+    GroupTypeModule,
+    ReplanishmentMethodModule,
+    CostCategoryModule,
+    PlanningItemModule,
+    SubsidiaryModule,
+    TaxScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

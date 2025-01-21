@@ -1,17 +1,17 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/auth/auth.guard';
-import { ProductTypeService } from './product_type.service';
+import { GroupTypeService } from './group_type.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('/api/master/product-type')
-export class ProductTypeController {
-  constructor(private service: ProductTypeService) {}
+@Controller('/api/master/group-type')
+export class GroupTypeController {
+  constructor(private service: GroupTypeService) {}
 
   @Get('/')
   index(): any {
     return {
       statusCode: 200,
-      message: 'Module Product Type',
+      message: 'Module Group Type',
     };
   }
 
@@ -88,7 +88,7 @@ export class ProductTypeController {
       remarks: remarks,
       created_at: new Date(),
       updated_at: new Date(),
-    };    
+    };
 
     let result = {
       statusCode: 200,

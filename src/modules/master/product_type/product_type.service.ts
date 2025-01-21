@@ -110,26 +110,10 @@ export class ProductTypeService {
       } else {
         params.id = menus.length > 0 ? menus[0].id + 1 : null;
       }
-
-      console.log('menus', params.id);
       result.data =
         insertOrUpdate == 'update'
           ? await queryRunner.manager.update(ProductType, paramsData.id, params)
           : await queryRunner.manager.save(ProductType, params);
-
-      if (insertOrUpdate == 'insert') {
-        await queryRunner.manager.update(
-          ProductType,
-          {
-            name: params.type,
-          },
-          {
-            id: menus[0].id + 1,
-          },
-        );
-
-        result.data.id = menus[0].id + 1;
-      }
 
       result.is_valid = true;
       result.message = 'Success';
