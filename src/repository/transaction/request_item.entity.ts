@@ -75,4 +75,61 @@ export class RequestItem{
 
     @Column()
     status:string;
+
+    @Column()
+    subsidiary:number;
+    
+    @Column()
+    primary_unit:number;
+
+    @Column()
+    primary_stock_unit:number;
+
+    @Column()
+    primary_purchase_unit:number;
+
+    @Column()
+    primary_sale_unit:number;
+
+    @Column()
+    primary_consumtion_unit:number;
+
+    @Column()
+    volume_type:number;
+
+    @Column()
+    incubation_days:string;
+
+    @Column()
+    costing_method:number;
+
+    @Column()
+    cost_category:number;
+
+    @Column()
+    purchase_price:string;
+
+    @Column()
+    planning_item_category:number;
+
+    @Column()
+    replanisment_method:number;
+
+    @Column()
+    tax_schedule:number;
+
+    @Column()
+    product_type:number;
+
+    @Column()
+    generate_accrual:number;
+
+    @Column()
+    group_type:number;
+
+    @Column()
+    auto_calculate:number;
+
+    @Column()
+    item_category:number;
 }

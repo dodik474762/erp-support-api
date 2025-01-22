@@ -8,6 +8,7 @@ import { RoutingHeader } from 'src/repository/master/routing_header.entity';
 import { RoutingPermission } from 'src/repository/master/routing_permission.entity';
 import { Actors } from 'src/repository/master/actor.entity';
 import { DocumentTransaction } from 'src/repository/master/document_transaction.entity';
+import { RequestItemSalesPrice } from 'src/repository/transaction/request_item_sales_price.entity';
 
 @Module({
   controllers: [RequestItemController],
@@ -15,6 +16,7 @@ import { DocumentTransaction } from 'src/repository/master/document_transaction.
   imports: [
     TypeOrmModule.forFeature([
       RequestItem,
+      RequestItemSalesPrice,
       RoutingHeader,
       RoutingPermission,
       Actors,
