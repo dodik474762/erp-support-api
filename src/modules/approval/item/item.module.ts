@@ -8,6 +8,7 @@ import { RoutingPermission } from 'src/repository/master/routing_permission.enti
 import { Actors } from 'src/repository/master/actor.entity';
 import { DocumentTransaction } from 'src/repository/master/document_transaction.entity';
 import { RouteAccService } from 'src/modules/helpers/route_acc/route_acc.service';
+import { RequestItemSalesPrice } from 'src/repository/transaction/request_item_sales_price.entity';
 
 @Module({
   providers: [ItemService, RouteAccService],
@@ -15,6 +16,7 @@ import { RouteAccService } from 'src/modules/helpers/route_acc/route_acc.service
   imports: [
     TypeOrmModule.forFeature([
       RequestItem,
+      RequestItemSalesPrice,
       RoutingHeader,
       RoutingPermission,
       Actors,

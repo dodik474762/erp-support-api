@@ -132,4 +132,70 @@ export class RequestItem{
 
     @Column()
     item_category:number;
+
+    @Column()
+    asset_account:number;
+
+    @Column()
+    asset_account_name:string;
+
+    @Column()
+    income_account:number;
+
+    @Column()
+    income_account_name:string;
+
+    @Column()
+    gain_account:number;
+
+    @Column()
+    gain_account_name:string;
+
+    @Column()
+    price_account:number;
+
+    @Column()
+    price_account_name:string;
+
+    @Column()
+    qty_account:number;
+
+    @Column()
+    qty_account_name:string;
+
+    @Column()
+    rate_account:number;
+
+    @Column()
+    rate_account_name:string;
+
+    @Column()
+    wip_account:number;
+
+    @Column()
+    wip_account_name:string;
+
+    @Column()
+    scrap_account:number;
+
+    @Column()
+    scrap_account_name:string;
+
+    @Column()
+    wip_cost_account:number;
+
+    @Column()
+    wip_cost_account_name:string;
+
+    @Column()
+    unbuild_account:number;
+
+    @Column()
+    unbuild_account_name:string;
+
+    @Column()
+    adjust_account:number;
+
+    @Column()
+    adjust_account_name:string;
 }

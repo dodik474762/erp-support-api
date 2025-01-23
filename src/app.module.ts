@@ -34,6 +34,8 @@ import { PlanningItemModule } from './modules/master/planning_item/planning_item
 import { SubsidiaryModule } from './modules/master/subsidiary/subsidiary.module';
 import { TaxScheduleModule } from './modules/master/tax_schedule/tax_schedule.module';
 import { PriceTypeModule } from './modules/master/price_type/price_type.module';
+import { CustomerCategoryModule } from './modules/master/customer_category/customer_category.module';
+import { VendorCategoryModule } from './modules/master/vendor_category/vendor_category.module';
 
 @Module({
   imports: [
@@ -76,6 +78,8 @@ import { PriceTypeModule } from './modules/master/price_type/price_type.module';
     SubsidiaryModule,
     TaxScheduleModule,
     PriceTypeModule,
+    CustomerCategoryModule,
+    VendorCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

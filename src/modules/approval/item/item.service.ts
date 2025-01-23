@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersModel } from 'src/model/users.model';
 import { RouteAccService } from 'src/modules/helpers/route_acc/route_acc.service';
 import { RequestItem } from 'src/repository/transaction/request_item.entity';
+import { RequestItemSalesPrice } from 'src/repository/transaction/request_item_sales_price.entity';
 import { Brackets, DataSource, Repository } from 'typeorm';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class ItemService {
   constructor(
     @InjectRepository(RequestItem)
     private requestItemRepo: Repository<RequestItem>,
+    @InjectRepository(RequestItemSalesPrice)
+    private requestItemSalesRepo: Repository<RequestItemSalesPrice>,
     private dataSource: DataSource,
   ) {}
 
@@ -103,6 +106,18 @@ export class ItemService {
         'users_next_acc.username as next_acc_name',
         'users_acc.username as acc_by_name',
         'job_title.job_name as jabatan_acc',
+        'subsidiary.type as subsidiary_type',
+        'product_type.type as product_type_name',
+        'unit_p.name as primary_unit_name',
+        'unit_ps.name as primary_stock_unit_name',
+        'unit_pu.name as primary_purchase_unit_name',
+        'unit_psu.name as primary_sale_unit_name',
+        'volume_type.type as volume_type_name',
+        'group_type.type as group_type_name',
+        'cost_category.type as cost_category_name',
+        'replanishment_method.type as replanisment_method_name',
+        'planning_item.type as planning_item_name',
+        'tax_schedule.type as tax_schedule_name',
       ])
       .leftJoin(
         'users',
@@ -112,9 +127,31 @@ export class ItemService {
       .leftJoin('employee', 'employee', 'employee.nik = users_next_acc.nik')
       .leftJoin('job_title', 'job_title', 'job_title.id = employee.job_title')
       .leftJoin('users', 'users_acc', 'users_acc.id = request_item.acc_by')
+      .leftJoin('subsidiary', 'subsidiary', 'subsidiary.id = request_item.subsidiary')
+      .leftJoin('product_type', 'product_type', 'product_type.id = request_item.product_type')
+      .leftJoin('unit', 'unit_p', 'unit_p.id = request_item.primary_unit')
+      .leftJoin('unit', 'unit_ps', 'unit_ps.id = request_item.primary_stock_unit')
+      .leftJoin('unit', 'unit_pu', 'unit_pu.id = request_item.primary_purchase_unit')
+      .leftJoin('unit', 'unit_psu', 'unit_psu.id = request_item.primary_sale_unit')
+      .leftJoin('volume_type', 'volume_type', 'volume_type.id = request_item.volume_type')
+      .leftJoin('group_type', 'group_type', 'group_type.id = request_item.group_type')
+      .leftJoin('cost_category', 'cost_category', 'cost_category.id = request_item.cost_category')
+      .leftJoin('replanishment_method', 'replanishment_method', 'replanishment_method.id = request_item.replanisment_method')
+      .leftJoin('planning_item', 'planning_item', 'planning_item.id = request_item.planning_item_category')
+      .leftJoin('tax_schedule', 'tax_schedule', 'tax_schedule.id = request_item.tax_schedule')
       .where('request_item.deleted IS NULL')
       .andWhere('request_item.id = :id', { id: id })
       .getRawOne();
+  }
+
+  async getDetailSalesItem(id: any): Promise<any> {
+    return this.requestItemSalesRepo
+      .createQueryBuilder('request_item_sales_price')
+      .select(['request_item_sales_price.*', 'price_type.type as type_price_name'])
+      .innerJoin('price_type', 'price_type', 'price_type.id = request_item_sales_price.type_price')
+      .where('request_item_sales_price.deleted IS NULL')
+      .andWhere('request_item_sales_price.request_item = :id', { id: id })
+      .getRawMany();
   }
 
   async countAll(search: any, user: UsersModel): Promise<any> {

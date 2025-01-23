@@ -106,6 +106,9 @@ export class RequestItemController {
     @Body('generateAccural') generateAccural: string,
     @Body('groupType') groupType: { value: string; label: string },
     @Body('autoCalculate') autoCalculate: string,
+    @Body('erpCode') erpCode: string,
+    @Body('erpId') erpId: string,
+    @Body('erpName') erpName: string,
     @Body('sales_items') sales_items: any[],
   ): Promise<any> {
     const data: any = {
@@ -134,6 +137,9 @@ export class RequestItemController {
       group_type: groupType && groupType.value,
       auto_calculate: autoCalculate ? 1 : 0,
       item_category: typeProduct.value,
+      item_erp_code: erpCode,
+      item_erp_id: erpId,
+      item_erp_name: erpName,
       created_at: new Date(),
       updated_at: new Date(),
     };

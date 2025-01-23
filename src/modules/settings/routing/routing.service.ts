@@ -144,7 +144,7 @@ export class RoutingService {
             )
           : await queryRunner.manager.save(RoutingHeader, params);
 
-      routingHeaderId = result.data.id;
+      routingHeaderId = insertOrUpdate == "insert" ? result.data.id : params.id;
 
       /*insert routing permsiion */
       await queryRunner.manager.delete(RoutingPermission, {

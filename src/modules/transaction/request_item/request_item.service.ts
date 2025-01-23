@@ -52,7 +52,9 @@ export class RequestItemService {
         new Brackets((qb) => {
           qb.where(`request_item.item_name LIKE '%${search}%'`)
             .orWhere(`request_item.item_code LIKE '%${search}%'`)
-            .orWhere(`request_item.code LIKE '%${search}%'`);
+            .orWhere(`request_item.code LIKE '%${search}%'`)
+            .orWhere(`request_item.item_erp_id LIKE '%${search}%'`)
+            .orWhere(`request_item.item_erp_name LIKE '%${search}%'`);
         }),
       )
       .andWhere(
@@ -148,7 +150,9 @@ export class RequestItemService {
         new Brackets((qb) => {
           qb.where(`request_item.item_name LIKE '%${search}%'`)
             .orWhere(`request_item.item_code LIKE '%${search}%'`)
-            .orWhere(`request_item.code LIKE '%${search}%'`);
+            .orWhere(`request_item.code LIKE '%${search}%'`)
+            .orWhere(`request_item.item_erp_id LIKE '%${search}%'`)
+            .orWhere(`request_item.item_erp_name LIKE '%${search}%'`);
         }),
       )
       .getCount();

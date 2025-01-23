@@ -77,24 +77,60 @@ export class ItemController {
       statusCode: 200,
       is_valid: true,
       data: [],
+      sales_item: [],
     };
 
     const data = await this.services.getDetail(id);
+    const sales_item = await this.services.getDetailSalesItem(id);
     result.data = data;
+    result.sales_item = sales_item;
     return result;
   }
 
   @Post('/submit')
   async submit(
     @Body('id') id: string,
-    @Body('account') account: { value: string; label: string },
+    @Body('cogsAcount') cogsAcount: { value: string; label: string },
+    @Body('assetAcount') assetAcount: { value: string; label: string },
+    @Body('incomeAccount') incomeAccount: { value: string; label: string },
+    @Body('gainAcount') gainAcount: { value: string; label: string },
+    @Body('priceVarianAccount') priceVarianAccount: { value: string; label: string },
+    @Body('qtyVarianAcount') qtyVarianAcount: { value: string; label: string },
+    @Body('exhangeAcount') exhangeAcount: { value: string; label: string },
+    @Body('wipAcount') wipAcount: { value: string; label: string },
+    @Body('scrapAcount') scrapAcount: { value: string; label: string },
+    @Body('wpAcount') wpAcount: { value: string; label: string },
+    @Body('unbuildAcount') unbuildAcount: { value: string; label: string },
+    @Body('adjustAcount') adjustAcount: { value: string; label: string },
     @Req() req: any,
   ): Promise<any> {
     const user = req.user;
     const data: any = {
       id: id,
-      account: account.value,
-      account_name: account.label,
+      account: cogsAcount.value,
+      account_name: cogsAcount.label,
+      asset_account: assetAcount.value,
+      asset_account_name: assetAcount.label,
+      income_account: incomeAccount.value,
+      income_account_name: incomeAccount.label,
+      gain_account: gainAcount.value,
+      gain_account_name: gainAcount.label,
+      price_account: priceVarianAccount.value,
+      price_account_name: priceVarianAccount.label,
+      qty_account: qtyVarianAcount.value,
+      qty_account_name: qtyVarianAcount.label,
+      rate_account: exhangeAcount.value,
+      rate_account_name: exhangeAcount.label,
+      wip_account: wipAcount.value,
+      wip_account_name: wipAcount.label,
+      scrap_account: scrapAcount.value,
+      scrap_account_name: scrapAcount.label,
+      wip_cost_account: wpAcount.value,
+      wip_cost_account_name: wpAcount.label,
+      unbuild_account: unbuildAcount.value,
+      unbuild_account_name: unbuildAcount.label,
+      adjust_account: adjustAcount.value,
+      adjust_account_name: adjustAcount.label,
       updated_at: new Date(),
     };
 
