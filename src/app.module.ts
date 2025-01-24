@@ -36,6 +36,7 @@ import { TaxScheduleModule } from './modules/master/tax_schedule/tax_schedule.mo
 import { PriceTypeModule } from './modules/master/price_type/price_type.module';
 import { CustomerCategoryModule } from './modules/master/customer_category/customer_category.module';
 import { VendorCategoryModule } from './modules/master/vendor_category/vendor_category.module';
+import { RequestCustomerModule } from './modules/transaction/request_customer/request_customer.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { VendorCategoryModule } from './modules/master/vendor_category/vendor_ca
     PriceTypeModule,
     CustomerCategoryModule,
     VendorCategoryModule,
+    RequestCustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
