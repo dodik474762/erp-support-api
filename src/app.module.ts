@@ -37,6 +37,9 @@ import { PriceTypeModule } from './modules/master/price_type/price_type.module';
 import { CustomerCategoryModule } from './modules/master/customer_category/customer_category.module';
 import { VendorCategoryModule } from './modules/master/vendor_category/vendor_category.module';
 import { RequestCustomerModule } from './modules/transaction/request_customer/request_customer.module';
+import { CustomerModule } from './modules/approval/customer/customer.module';
+import { RequestVendorModule } from './modules/transaction/request_vendor/request_vendor.module';
+import { VendorModule } from './modules/approval/vendor/vendor.module';
 
 @Module({
   imports: [
@@ -82,6 +85,9 @@ import { RequestCustomerModule } from './modules/transaction/request_customer/re
     CustomerCategoryModule,
     VendorCategoryModule,
     RequestCustomerModule,
+    CustomerModule,
+    RequestVendorModule,
+    VendorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
